@@ -29,9 +29,10 @@ function ExoAJAX(url, method, data, callback) {
     fetch(url, {
         method: fetch_method,
         headers: headers,
-        data: JSON.stringify(data)
+        body: JSON.stringify(data)
     }).then((response) => {
-        callback(JSON.parse(response));
+        var promise = response.json();
+        promise.then(callback)
     }).catch(callback);
 }
 
@@ -53,6 +54,8 @@ class Model extends EventEmitter {
         Object.assign(this, this.defaults, data);
     }
     sync(method, callback) {
+        var data = this.serialize();
+        console.log("Serizlie: ", data);
         ExoAJAX(this.url, method, this.serialize(), (response) => {
             console.log("Response: ", response);
             if (method === "create" || method === "update") {
@@ -79,13 +82,13 @@ class Model extends EventEmitter {
             console.warn("Invalid arguments to Model.save", args);
             return;
         }
-        sync(method, callback);
+        this.sync(method, callback);
     }
     fetch(callback) {
-        sync("read", callback);
+        this.sync("read", callback);
     }
     delete(callback) {
-        sync("delete", callback);
+        this.sync("delete", callback);
     }
     validate(data) {
         //

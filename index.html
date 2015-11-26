@@ -5,64 +5,8 @@
         <title>Exo Test</title>
         <script src="https://google.github.io/traceur-compiler/bin/traceur.js"></script>
         <script src="https://google.github.io/traceur-compiler/src/bootstrap.js"></script>
-        <script type="module">
-            import {Model, View, loaded_properly} from './src/exo.js';
-            document.getElementsByTagName('body')[0].innerHTML = loaded_properly;
-            console.log(loaded_properly);
-
-            class TestModel extends Model {
-                get defaults() {
-                    return {
-                        foo: 'bar'
-                    }
-                }
-            }
-
-            class TestView extends View {
-                constructor(options) {
-                    super(options);
-                    this.model.addListener('change', this.render.bind(this));
-                }
-                change_my_input(event) {
-                    console.log("Input Changed", event, this);
-                }
-                element_clicked(event) {
-                    console.log("Element Clicked", event, this);
-                }
-                get events() {
-                    return {
-                        "keyup .myinput": this.change_my_input.bind(this),
-                        "click": this.element_clicked.bind(this)
-                    }
-                }
-                render() {
-                    console.log(this);
-                    console.log("Render Called");
-                    this.element.innerHTML = '';
-                    var div = document.createElement('div');
-                    console.log(div);
-                    div.innerHTML = this.model.foo;
-                    this.element.appendChild(div);
-                    var input = document.createElement('input');
-                    input.setAttribute('type', 'text');
-                    input.setAttribute('class', 'myinput');
-                    this.element.appendChild(input);
-                    return this;
-                }
-            }
-
-            var model = new TestModel();
-            var view = new TestView({
-                model: model
-            });
-            var body = document.getElementsByTagName('body')[0];
-            body.appendChild(view.element);
-            view.render();
-
-            setTimeout(function() {
-                model.set({foo: 'weeeee'});
-            }, 1000);
-        </script>
+        <script src="bower_components/handlebars/handlebars.js"></script>
+        <script src="main.js" type="module"></script>
     </head>
     <body>
     </body>
