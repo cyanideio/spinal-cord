@@ -158,11 +158,15 @@ class View extends EventEmitter {
                 selector = '';
             }
 
-            this.element.addEventListener(event_type, function(event) {
-                if (MatchesSelector.call(event.target, selector)) {
-                    method(event);
-                }
-            }, false);
+            if (selector !== '') {
+                this.element.addEventListener(event_type, function(event) {
+                    if (MatchesSelector.call(event.target, selector)) {
+                        method(event);
+                    }
+                }, false);
+            } else {
+                this.element.addEventListener(event_type, method);
+            }
 
             console.log(event_type, selector, method);
         });

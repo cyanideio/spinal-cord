@@ -21,16 +21,18 @@
             class TestView extends View {
                 constructor(options) {
                     super(options);
-                    this.model.addListener('change', () => {
-                        this.render();
-                    });
+                    this.model.addListener('change', this.render.bind(this));
                 }
-                change_my_input() {
-                    console.log("Input CHanged");
+                change_my_input(event) {
+                    console.log("Input Changed", event, this);
+                }
+                element_clicked(event) {
+                    console.log("Element Clicked", event, this);
                 }
                 get events() {
                     return {
-                        "keyup .myinput": this.change_my_input
+                        "keyup .myinput": this.change_my_input.bind(this),
+                        "click": this.element_clicked.bind(this)
                     }
                 }
                 render() {
