@@ -18,15 +18,48 @@
                 }
             }
 
-            var model = new TestModel({});
+            class TestView extends View {
+                constructor(options) {
+                    super(options);
+                    this.model.addListener('change', () => {
+                        this.render();
+                    });
+                }
+                change_my_input() {
+                    console.log("Input CHanged");
+                }
+                get events() {
+                    return {
+                        "keyup .myinput": this.change_my_input
+                    }
+                }
+                render() {
+                    console.log(this);
+                    console.log("Render Called");
+                    this.element.innerHTML = '';
+                    var div = document.createElement('div');
+                    console.log(div);
+                    div.innerHTML = this.model.foo;
+                    this.element.appendChild(div);
+                    var input = document.createElement('input');
+                    input.setAttribute('type', 'text');
+                    input.setAttribute('class', 'myinput');
+                    this.element.appendChild(input);
+                    return this;
+                }
+            }
 
-            console.log(model.serialize());
-
-            var model2 = new TestModel({
-                foo: 'baz'
+            var model = new TestModel();
+            var view = new TestView({
+                model: model
             });
+            var body = document.getElementsByTagName('body')[0];
+            body.appendChild(view.element);
+            view.render();
 
-            console.log(model2.serialize());
+            setTimeout(function() {
+                model.set({foo: 'weeeee'});
+            }, 1000);
         </script>
     </head>
     <body>

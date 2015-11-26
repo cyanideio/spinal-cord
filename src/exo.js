@@ -35,6 +35,17 @@ function ExoAJAX(url, method, data, callback) {
     }).catch(callback);
 }
 
+var MatchesSelector;
+
+(function(doc) {
+   MatchesSelector =
+      doc.matchesSelector ||
+      doc.webkitMatchesSelector ||
+      doc.mozMatchesSelector ||
+      doc.oMatchesSelector ||
+      doc.msMatchesSelector;
+})(document.documentElement);
+
 class Model extends EventEmitter {
     constructor(data={}) {
         super();
@@ -122,12 +133,45 @@ class Collection extends EventEmitter {
 class View extends EventEmitter {
     constructor(options) {
         super();
-        if (!options.hasOwnProperty('element')) {
-            this.element = document.createElement(this.tag());
+        if (options !== undefined) {
+            if (!options.hasOwnProperty('element')) {
+                this.element = document.createElement(this.tag);
+            } else {
+                this.element = options.element;
+            }
+            if (options.hasOwnProperty('model')) {
+                this.model = options.model;
+            }
         }
+
+        // Bind Events
+        Object.keys(this.events).forEach((event_selector) => {
+            var index_of = event_selector.indexOf(' ');
+            var event_type;
+            var selector;
+            var method = this.events[event_selector];
+            if (index_of !== -1) {
+                event_type = event_selector.substr(0, index_of);
+                selector = event_selector.substr(index_of + 1);
+            } else {
+                event_type = event_selector;
+                selector = '';
+            }
+
+            this.element.addEventListener(event_type, function(event) {
+                if (MatchesSelector.call(event.target, selector)) {
+                    method(event);
+                }
+            }, false);
+
+            console.log(event_type, selector, method);
+        });
     }
     get tag() {
         return 'div';
+    }
+    get events() {
+        return {};
     }
     render() {
         return this.element;
