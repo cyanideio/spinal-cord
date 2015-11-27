@@ -192,7 +192,7 @@ class Collection extends EventEmitter {
             }
         });
 
-        this.emit("changed");
+        this.emit("change");
     }
     add(data) {
         var model;
@@ -202,6 +202,18 @@ class Collection extends EventEmitter {
         } else {
             model = data;
         }
+        this.addListener(model, "change", () => {
+            this.emit("change");
+        });
+        this.addListener(model, "saved", () => {
+            this.emit("change");
+        });
+        this.addListener(model, "fetched", () => {
+            this.emit("change");
+        });
+        this.addListener(model, "deleted", () => {
+            this.emit("change");
+        });
         this.models.push(model);
         this.model_lookup[model.id] = this.models.length - 1;
         this.emit("add", model);
@@ -209,6 +221,11 @@ class Collection extends EventEmitter {
     }
     remove(data) {
         var id = data.id;
+        var model = this.models[this.model_lookup[id]];
+        this.removeListener(model, "change");
+        this.removeListener(model, "saved");
+        this.removeListener(model, "fetched");
+        this.removeListener(model, "deleted");
         delete this.models[this.model_lookup[id]];
         delete this.model_lookup[id];
         this.emit("remove", data);

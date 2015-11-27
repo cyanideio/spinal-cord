@@ -31,9 +31,13 @@ class TodoView extends View {
         this.template = Handlebars.compile(document.getElementById('todo_template').innerHTML);
     }
     save(event) {
+        var d = new Date();
+        var iso_datetime = d.toISOString();
+        var completed = (this.element.querySelector('.todo_completed').checked) ? iso_datetime : null;
         var data = {
             name: this.element.querySelector('#name').value,
-            description: this.element.querySelector('#description').value
+            description: this.element.querySelector('#description').value,
+            completed: completed
         };
         console.log(data);
         this.model.save(data, (response) => {
@@ -56,7 +60,7 @@ class TodosView extends View {
     constructor(options) {
         super(options);
         this.template = Handlebars.compile(document.getElementById('todos_template').innerHTML);
-        this.collection.addListener('changed', this.render.bind(this));
+        this.collection.addListener('change', this.render.bind(this));
     }
     get events() {
         return {
