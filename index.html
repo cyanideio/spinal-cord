@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Exo Test</title>
-        <script id="todos_template" type="text/html">
+        <script id="todos_template" type="text/x-handlebars-template">
             <table>
                 <thead>
                     <tr>
@@ -21,7 +21,13 @@
                             <td>{{name}}</td>
                             <td>{{description}}</td>
                             <td>{{created}}</td>
-                            <td>{{completed}}</td>
+                            <td>
+                                {{#if completed}}
+                                    {{completed}}
+                                {{else}}
+                                    <input class="completed_checkbox" type="checkbox" data-id="{{id}}" />
+                                {{/if}}
+                            </td>
                         </tr>
                     {{/entries}}
                 </tbody>

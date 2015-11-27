@@ -10,7 +10,7 @@ class Todo extends Model {
             name: '',
             description: '',
             created: '',
-            updated: ''
+            completed: ''
         };
     }
 }
@@ -58,6 +58,15 @@ class TodosView extends View {
         super(options);
         this.template = Handlebars.compile(document.getElementById('todos_template').innerHTML);
         this.collection.addListener('changed', this.render.bind(this));
+    }
+    get events() {
+        return {
+            "change .completed_checkbox": this.todo_completed.bind(this)
+        };
+    }
+    todo_completed(event) {
+        var id = event.target.dataset.id;
+        console.log(id);
     }
     render() {
         var render_data = {
