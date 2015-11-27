@@ -1,4 +1,4 @@
-import {Model, View} from './src/exo.js';
+import {Model, View, Collection, Router} from './src/exo.js';
 // import {Handlebars} from './bower_components/handlebars/handlebars.js';
 
 class Todo extends Model {
@@ -12,6 +12,15 @@ class Todo extends Model {
             created: '',
             updated: ''
         };
+    }
+}
+
+class Todos extends Collection {
+    get model() {
+        return Todo;
+    }
+    get url() {
+        return '/api/todo/';
     }
 }
 
@@ -53,4 +62,9 @@ class TodoView extends View {
     var body = document.getElementsByTagName('body')[0];
     body.appendChild(view.element);
     view.render();
+
+    var collection = new Todos();
+    collection.fetch(() => {
+        console.log(collection.serialize());
+    });
 })();

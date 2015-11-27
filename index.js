@@ -52,9 +52,7 @@ app.post('/api/todo', function(req, res) {
         completed: null
     };
     db.query('INSERT INTO todo SET ?', data, function(error, results) {
-        console.log(results);
         db.query('SELECT * FROM todo WHERE id = ?', [results.insertId], function(error, results) {
-            console.log(error, results);
             res.json(results[0]);
         });
     });
@@ -79,18 +77,19 @@ app.put('/api/todo/:todo_id', function(req, res) {
         id: req.params.todo_id,
         name: req.body.name,
         description: req.body.description,
-        created: d.toISOString(),
         completed: null
     };
     db.query('UPDATE todo SET ?', data, function(error, results, fields) {
-        res.json({status: 'ok'});
+        db.query('SELECT * FROM todo WHERE id = ?', [todo_id], function(error, results) {
+            res.json(results[0]);
+        })
     });
 });
 
 app.delete('/api/todo/:todo_id', function(req, res) {
     var todo_id = req.params.todo_id;
     db.query('DELETE FROM todo WHERE id = ?', [todo_id], function(error, results) {
-        res.json({});
+        res.json({status: 'ok'});
     });
 });
 

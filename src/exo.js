@@ -26,11 +26,17 @@ function ExoAJAX(url, method, data, callback) {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    fetch(url, {
+    var fetch_data = {
         method: fetch_method,
-        headers: headers,
-        body: JSON.stringify(data)
-    }).then((response) => {
+        headers: headers
+    };
+
+    if (method === "create" || method === "update") {
+        fetch_data.body = JSON.stringify(data);
+    }
+
+    fetch(url, fetch_data)
+    .then((response) => {
         var promise = response.json();
         promise.then(callback)
     }).catch(callback);
@@ -55,12 +61,14 @@ class Model extends EventEmitter {
     }
     sync(method, callback) {
         var data = this.serialize();
-        console.log("Serizlie: ", data);
+        console.log("Serialize: ", data);
         ExoAJAX(this.url, method, this.serialize(), (response) => {
             console.log("Response: ", response);
             if (method === "create" || method === "update") {
+                this.set(response, false);
                 this.emit("saved");
             } else if (method === "read") {
+                this.set(response, false);
                 this.emit("fetched");
             } else if (method === "delete") {
                 this.emit("deleted");
@@ -130,6 +138,68 @@ class Model extends EventEmitter {
 class Collection extends EventEmitter {
     constructor() {
         super();
+        this.models = [];
+        this.model_lookup = {};
+    }
+    serialize() {
+        var out = [];
+        this.models.forEach((model) => {
+            out.push(model.serialize());
+        });
+        return out;
+    }
+    fetch(callback) {
+        ExoAJAX(this.url, "read", {}, (response) => {
+            this.emit("fetched");
+            this.reset(response);
+            if (callback !== undefined) {
+                callback(response);
+            }
+        });
+    }
+    reset(data) {
+        var ids = [];
+        data.forEach((entry) => {
+            var model;
+            if (this.model_lookup.hasOwnProperty(entry.id)) {
+                model = this.models[this.model_lookup[entry.id]];
+            } else {
+                model = this.add(entry);
+            }
+            ids.push(entry.id.toString());
+        });
+
+        Object.keys(this.model_lookup).forEach((model_id) => {
+            var model_id_string = model_id.toString();
+            if (ids.indexOf(model_id_string) === -1) {
+                this.remove(this.models[this.model_lookup[model_id]]);
+            }
+        });
+    }
+    add(data) {
+        var model;
+        // There's probably a better way to identify objects vs models.
+        if (data.constructor.name === "Object") {
+            model = new this.model(data);
+        } else {
+            model = data;
+        }
+        this.models.push(model);
+        this.model_lookup[model.id] = this.models.length - 1;
+        this.emit("add", model);
+        return model;
+    }
+    remove(data) {
+        var id = data.id;
+        delete this.models[this.model_lookup[id]];
+        delete this.model_lookup[id];
+        this.emit("remove", data);
+    }
+    get url() {
+        return '/';
+    }
+    get model() {
+        return Model;
     }
 }
 
