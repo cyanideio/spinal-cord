@@ -155,6 +155,12 @@ class Collection extends EventEmitter {
         });
         return out;
     }
+    get(model_id) {
+        if (this.model_lookup.hasOwnProperty(model_id)) {
+            return this.models[this.model_lookup[model_id]];
+        }
+        return undefined;
+    }
     fetch(callback) {
         ExoAJAX(this.url, "read", {}, (response) => {
             this.emit("fetched");

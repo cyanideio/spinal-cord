@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title>Exo Test</title>
         <script id="todos_template" type="text/x-handlebars-template">
+            <button class="create_button">Create</button><br>
             <table>
                 <thead>
                     <tr>
@@ -12,6 +13,7 @@
                         <td>Description</td>
                         <td>Created</td>
                         <td>Completed</td>
+                        <td></td>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,10 +30,26 @@
                                     <input class="completed_checkbox" type="checkbox" data-id="{{id}}" />
                                 {{/if}}
                             </td>
+                            <td><button class="edit_todo" data-id="{{id}}">Edit</button></td>
                         </tr>
                     {{/entries}}
                 </tbody>
             </table>
+            <br>
+            <div id="edit_todo_container"></div>
+        </script>
+        <script id="todo_template" type="text/x-handlebars-template">
+            <strong>Name:</strong><input type="text" class="todo_name" value="{{name}}" /><br>
+            <strong>Description:</strong><input type="text" class="todo_description" value="{{description}}" /><br>
+            <strong>Created:</strong>{{created}}<br>
+            <strong>Completed:</strong>
+                {{#if completed}}
+                    {{completed}}
+                {{else}}
+                    <input type="checkbox" class="todo_completed" />
+                {{/if}}
+                <br>
+            <button class="todo_save">Save</button>
         </script>
         <script src="https://google.github.io/traceur-compiler/bin/traceur.js"></script>
         <script src="https://google.github.io/traceur-compiler/src/bootstrap.js"></script>

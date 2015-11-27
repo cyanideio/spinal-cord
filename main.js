@@ -28,8 +28,7 @@ class TodoView extends View {
     constructor(options) {
         super(options);
         this.model.addListener('change', this.render.bind(this));
-        this.template = Handlebars.compile('Name: <input id="name" type="text" value="{{name}}" /><br>Description: <input id="description" type="text" value="{{description}}" /><br><button id="save">Save</button>');
-        console.log(this.template);
+        this.template = Handlebars.compile(document.getElementById('todo_template').innerHTML);
     }
     save(event) {
         var data = {
@@ -61,8 +60,25 @@ class TodosView extends View {
     }
     get events() {
         return {
-            "change .completed_checkbox": this.todo_completed.bind(this)
+            "change .completed_checkbox": this.todo_completed.bind(this),
+            "click .edit_todo": this.edit_todo.bind(this),
+            "click .create_button": this.create_todo.bind(this)
         };
+    }
+    create_todo() {
+        //
+    }
+    edit_todo(event) {
+        var id = event.target.dataset.id;
+        var model = this.collection.get(id);
+        console.log(id, model);
+        var view = new TodoView({
+            model: model
+        });
+        var container = this.element.querySelector('#edit_todo_container');
+        container.innerHTML = '';
+        container.appendChild(view.element);
+        view.render();
     }
     todo_completed(event) {
         var id = event.target.dataset.id;
