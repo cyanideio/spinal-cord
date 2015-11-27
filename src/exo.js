@@ -209,11 +209,15 @@ class View extends EventEmitter {
         if (options !== undefined) {
             if (!options.hasOwnProperty('element')) {
                 this.element = document.createElement(this.tag);
+                this.element.setAttribute('class', this.class_name);
             } else {
                 this.element = options.element;
             }
             if (options.hasOwnProperty('model')) {
                 this.model = options.model;
+            }
+            if (options.hasOwnProperty('collection')) {
+                this.collection = options.collection;
             }
         }
 
@@ -243,6 +247,9 @@ class View extends EventEmitter {
 
             console.log(event_type, selector, method);
         });
+    }
+    get class_name() {
+        return '';
     }
     get tag() {
         return 'div';
