@@ -3,6 +3,30 @@
     <head>
         <meta charset="UTF-8">
         <title>Exo Test</title>
+        <script id="todos_template" type="text/html">
+            <table>
+                <thead>
+                    <tr>
+                        <td>Id</td>
+                        <td>Name</td>
+                        <td>Description</td>
+                        <td>Created</td>
+                        <td>Completed</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#entries}}
+                        <tr>
+                            <td>{{id}}</td>
+                            <td>{{name}}</td>
+                            <td>{{description}}</td>
+                            <td>{{created}}</td>
+                            <td>{{completed}}</td>
+                        </tr>
+                    {{/entries}}
+                </tbody>
+            </table>
+        </script>
         <script src="https://google.github.io/traceur-compiler/bin/traceur.js"></script>
         <script src="https://google.github.io/traceur-compiler/src/bootstrap.js"></script>
         <script src="bower_components/handlebars/handlebars.js"></script>

@@ -1,4 +1,4 @@
-import {Model, View, Collection, Router} from './src/exo.js';
+import {Model, View, Collection, Router, FetchFile} from './src/exo.js';
 // import {Handlebars} from './bower_components/handlebars/handlebars.js';
 
 class Todo extends Model {
@@ -53,17 +53,38 @@ class TodoView extends View {
     }
 }
 
+class TodosView extends View {
+    constructor(options) {
+        super(options);
+        this.template = Handlebars.compile(document.getElementById('todos_template').innerHTML);
+        this.collection.addListener('changed', this.render.bind(this));
+    }
+    render() {
+        var render_data = {
+            entries: this.collection.serialize()
+        };
+        this.element.innerHTML = this.template(render_data);
+    }
+}
+
 (function() {
     console.log("DOM CONTENT LOADED");
-    var model = new Todo();
-    var view = new TodoView({
-        model: model
-    });
-    var body = document.getElementsByTagName('body')[0];
-    body.appendChild(view.element);
-    view.render();
+    // var model = new Todo();
+    // var view = new TodoView({
+    //     model: model
+    // });
+    // var body = document.getElementsByTagName('body')[0];
+    // body.appendChild(view.element);
+    // view.render();
 
     var collection = new Todos();
+    var todos_view = new TodosView({
+        collection: collection
+    });
+
+    document.getElementsByTagName('body')[0].appendChild(todos_view.element);
+    todos_view.render();
+
     collection.fetch(() => {
         console.log(collection.serialize());
     });

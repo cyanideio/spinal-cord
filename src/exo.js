@@ -2,6 +2,15 @@
 
 import {EventEmitter} from './events.js';
 
+function FetchFile(url, callback) {
+    fetch(url).then((response) => {
+        var promise = response.body();
+        promise.then(callback);
+    }).catch((response) => {
+        console.warn("Failed to fetch file!", response);
+    });
+}
+
 function AppendUrlId(url, data) {
     if (data.hasOwnProperty('id')) {
         if (!url.endsWith('/')) {
@@ -61,9 +70,7 @@ class Model extends EventEmitter {
     }
     sync(method, callback) {
         var data = this.serialize();
-        console.log("Serialize: ", data);
         ExoAJAX(this.url, method, this.serialize(), (response) => {
-            console.log("Response: ", response);
             if (method === "create" || method === "update") {
                 this.set(response, false);
                 this.emit("saved");
@@ -158,6 +165,7 @@ class Collection extends EventEmitter {
         });
     }
     reset(data) {
+        var is_changed = false;
         var ids = [];
         data.forEach((entry) => {
             var model;
@@ -165,6 +173,7 @@ class Collection extends EventEmitter {
                 model = this.models[this.model_lookup[entry.id]];
             } else {
                 model = this.add(entry);
+                is_changed = true;
             }
             ids.push(entry.id.toString());
         });
@@ -173,8 +182,11 @@ class Collection extends EventEmitter {
             var model_id_string = model_id.toString();
             if (ids.indexOf(model_id_string) === -1) {
                 this.remove(this.models[this.model_lookup[model_id]]);
+                is_changed = true;
             }
         });
+
+        this.emit("changed");
     }
     add(data) {
         var model;
@@ -244,8 +256,6 @@ class View extends EventEmitter {
             } else {
                 this.element.addEventListener(event_type, method);
             }
-
-            console.log(event_type, selector, method);
         });
     }
     get class_name() {
@@ -270,4 +280,4 @@ class Router extends EventEmitter {
 
 var loaded_properly = 'loaded';
 
-export {Model, Collection, View, Router, loaded_properly};
+export {Model, Collection, View, Router, ExoAJAX, FetchFile, loaded_properly};
