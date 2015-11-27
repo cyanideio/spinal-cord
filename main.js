@@ -42,7 +42,7 @@ class TodoView extends View {
     }
     get events() {
         return {
-            "click #save": this.save.bind(this)
+            "click .todo_save": this.save.bind(this)
         }
     }
     render() {
@@ -62,16 +62,24 @@ class TodosView extends View {
         return {
             "change .completed_checkbox": this.todo_completed.bind(this),
             "click .edit_todo": this.edit_todo.bind(this),
+            "click .delete_todo": this.delete_todo.bind(this),
             "click .create_button": this.create_todo.bind(this)
         };
     }
     create_todo() {
-        //
+        console.log("Create TODO");
+        var view = new TodoView({
+            model: new Todo()
+        });
+        var container = this.element.querySelector('#edit_todo_container');
+        container.innerHTML = '';
+        container.appendChild(view.element);
+        view.render();
     }
     edit_todo(event) {
         var id = event.target.dataset.id;
         var model = this.collection.get(id);
-        console.log(id, model);
+        console.log("Edit TODO: ", id, model);
         var view = new TodoView({
             model: model
         });
@@ -80,9 +88,15 @@ class TodosView extends View {
         container.appendChild(view.element);
         view.render();
     }
+    delete_todo(event) {
+        var id = event.target.dataset.id;
+        var model = this.collection.get(id);
+        console.log("Delete TODO: ", id, model);
+    }
     todo_completed(event) {
         var id = event.target.dataset.id;
-        console.log(id);
+        var model = this.collection.get(id);
+        console.log("Complete TODO: ", id, model);
     }
     render() {
         var render_data = {
@@ -93,15 +107,6 @@ class TodosView extends View {
 }
 
 (function() {
-    console.log("DOM CONTENT LOADED");
-    // var model = new Todo();
-    // var view = new TodoView({
-    //     model: model
-    // });
-    // var body = document.getElementsByTagName('body')[0];
-    // body.appendChild(view.element);
-    // view.render();
-
     var collection = new Todos();
     var todos_view = new TodosView({
         collection: collection

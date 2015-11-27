@@ -3,6 +3,20 @@
     <head>
         <meta charset="UTF-8">
         <title>Exo Test</title>
+        <style>
+            body {
+                background-color: #222;
+                color: white;
+                font-family: sans-serif;
+                font-size: 14px;
+            }
+
+            input {
+                background-color: black;
+                color: white;
+                border: 1px solid #444;
+            }
+        </style>
         <script id="todos_template" type="text/x-handlebars-template">
             <button class="create_button">Create</button><br>
             <table>
@@ -30,7 +44,10 @@
                                     <input class="completed_checkbox" type="checkbox" data-id="{{id}}" />
                                 {{/if}}
                             </td>
-                            <td><button class="edit_todo" data-id="{{id}}">Edit</button></td>
+                            <td>
+                                <button class="edit_todo" data-id="{{id}}">Edit</button>
+                                <button class="delete_todo" data-id="{{id}}">Delete</button>
+                            </td>
                         </tr>
                     {{/entries}}
                 </tbody>
@@ -41,7 +58,7 @@
         <script id="todo_template" type="text/x-handlebars-template">
             <strong>Name:</strong><input type="text" class="todo_name" value="{{name}}" /><br>
             <strong>Description:</strong><input type="text" class="todo_description" value="{{description}}" /><br>
-            <strong>Created:</strong>{{created}}<br>
+            {{#if created}}<strong>Created:</strong>{{created}}<br>{{/if}}
             <strong>Completed:</strong>
                 {{#if completed}}
                     {{completed}}
