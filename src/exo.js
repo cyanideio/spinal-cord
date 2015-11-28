@@ -211,6 +211,7 @@ class Collection extends EventEmitter {
     add(data) {
         var model;
         // There's probably a better way to identify objects vs models.
+        // Need to find a way to check for parent most class object, and see if it's the same as Model
         if (data.constructor.name === "Object") {
             model = new this.model(data);
         } else {
