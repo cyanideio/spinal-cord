@@ -35,8 +35,8 @@ class TodoView extends View {
         var iso_datetime = d.toISOString();
         var completed = (this.element.querySelector('.todo_completed').checked) ? iso_datetime : null;
         var data = {
-            name: this.element.querySelector('#name').value,
-            description: this.element.querySelector('#description').value,
+            name: this.element.querySelector('.todo_name').value,
+            description: this.element.querySelector('.todo_description').value,
             completed: completed
         };
         console.log(data);
@@ -72,8 +72,13 @@ class TodosView extends View {
     }
     create_todo() {
         console.log("Create TODO");
+        var new_todo = new Todo();
+        new_todo.addOneTimeListener('saved', () => {
+            console.log("Add model to collection: ", new_todo);
+            this.collection.add(new_todo);
+        });
         var view = new TodoView({
-            model: new Todo()
+            model: new_todo
         });
         var container = this.element.querySelector('#edit_todo_container');
         container.innerHTML = '';
@@ -95,14 +100,25 @@ class TodosView extends View {
     delete_todo(event) {
         var id = event.target.dataset.id;
         var model = this.collection.get(id);
+        model.delete();
         console.log("Delete TODO: ", id, model);
     }
     todo_completed(event) {
         var id = event.target.dataset.id;
         var model = this.collection.get(id);
         console.log("Complete TODO: ", id, model);
+        var completed = null;
+        if (model.completed === null) {
+            var d = new Date();
+            var iso_datetime = d.toISOString();
+            completed = iso_datetime;
+        }
+        model.save({completed: completed}, () => {
+            console.log("Completed Saved!");
+        });
     }
     render() {
+        console.log("Rendering TODOs");
         var render_data = {
             entries: this.collection.serialize()
         };

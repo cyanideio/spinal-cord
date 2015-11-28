@@ -72,15 +72,11 @@ app.get('/api/todo/:todo_id', function(req, res) {
 });
 
 app.put('/api/todo/:todo_id', function(req, res) {
-    var d = new Date();
-    var data = {
-        id: req.params.todo_id,
-        name: req.body.name,
-        description: req.body.description,
-        completed: null
-    };
-    db.query('UPDATE todo SET ?', data, function(error, results, fields) {
-        db.query('SELECT * FROM todo WHERE id = ?', [todo_id], function(error, results) {
+    db.query('UPDATE todo SET name = ?, description = ?, completed = ? WHERE id = ?', [
+        req.body.name, req.body.description, req.body.completed, req.params.todo_id
+    ], function(error, results, fields) {
+        console.log(error);
+        db.query('SELECT * FROM todo WHERE id = ?', [req.params.todo_id], function(error, results) {
             res.json(results[0]);
         })
     });

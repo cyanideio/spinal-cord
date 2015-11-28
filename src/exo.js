@@ -71,14 +71,15 @@ class Model extends EventEmitter {
     sync(method, callback) {
         var data = this.serialize();
         ExoAJAX(this.url, method, this.serialize(), (response) => {
+            console.log("Model.sync callback method=" + method);
             if (method === "create" || method === "update") {
                 this.set(response, false);
-                this.emit("saved");
+                this.emit("saved", this);
             } else if (method === "read") {
                 this.set(response, false);
-                this.emit("fetched");
+                this.emit("fetched", this);
             } else if (method === "delete") {
-                this.emit("deleted");
+                this.emit("deleted", this);
             }
             if (callback !== undefined) {
                 callback(response);
@@ -130,7 +131,7 @@ class Model extends EventEmitter {
             this.validate(temp_data);
             Object.assign(this, temp_data);
             if (emit_change_event) {
-                this.emit("change");
+                this.emit("change", this);
             }
             return true;
         } catch (exception) {
@@ -194,6 +195,19 @@ class Collection extends EventEmitter {
 
         this.emit("change");
     }
+    model_changed(model) {
+        this.emit("change");
+    }
+    model_saved(model) {
+        this.emit("change");
+    }
+    model_fetched(model) {
+        this.emit("change");
+    }
+    model_deleted(model) {
+        this.remove(model);
+        this.emit("change");
+    }
     add(data) {
         var model;
         // There's probably a better way to identify objects vs models.
@@ -202,18 +216,10 @@ class Collection extends EventEmitter {
         } else {
             model = data;
         }
-        this.addListener(model, "change", () => {
-            this.emit("change");
-        });
-        this.addListener(model, "saved", () => {
-            this.emit("change");
-        });
-        this.addListener(model, "fetched", () => {
-            this.emit("change");
-        });
-        this.addListener(model, "deleted", () => {
-            this.emit("change");
-        });
+        model.addListener("change", this.model_changed.bind(this));
+        model.addListener("saved", this.model_saved.bind(this));
+        model.addListener("fetched", this.model_fetched.bind(this));
+        model.addListener("deleted", this.model_deleted.bind(this));
         this.models.push(model);
         this.model_lookup[model.id] = this.models.length - 1;
         this.emit("add", model);
@@ -222,10 +228,10 @@ class Collection extends EventEmitter {
     remove(data) {
         var id = data.id;
         var model = this.models[this.model_lookup[id]];
-        this.removeListener(model, "change");
-        this.removeListener(model, "saved");
-        this.removeListener(model, "fetched");
-        this.removeListener(model, "deleted");
+        model.removeListener("change", this.model_changed);
+        model.removeListener("saved", this.model_saved);
+        model.removeListener("fetched", this.model_fetched);
+        model.removeListener("deleted", this.model_deleted);
         delete this.models[this.model_lookup[id]];
         delete this.model_lookup[id];
         this.emit("remove", data);
