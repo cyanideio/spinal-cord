@@ -206,7 +206,7 @@ class Collection extends EventEmitter {
     }
     model_deleted(model) {
         this.remove(model);
-        this.emit("change");
+        //this.emit("change"); // Already fired in remove.
     }
     add(data) {
         var model;
@@ -224,6 +224,7 @@ class Collection extends EventEmitter {
         this.models.push(model);
         this.model_lookup[model.id] = this.models.length - 1;
         this.emit("add", model);
+        this.emit("change");
         return model;
     }
     remove(data) {
@@ -236,12 +237,26 @@ class Collection extends EventEmitter {
         delete this.models[this.model_lookup[id]];
         delete this.model_lookup[id];
         this.emit("remove", data);
+        this.emit("change");
     }
     get url() {
         return '/';
     }
     get model() {
         return Model;
+    }
+    comparator(left, right) {
+        // TODO: Strengthen this to do alphabetical on strings.
+        return left.id - right.id;
+    }
+    sort() {
+        this.models.sort(this.comparator);
+
+        var index = 0;
+        this.models.forEach((model) => {
+            this.model_lookup[model.id] = index;
+            index += 1;
+        });
     }
 }
 

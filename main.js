@@ -33,7 +33,8 @@ class TodoView extends View {
     save(event) {
         var d = new Date();
         var iso_datetime = d.toISOString();
-        var completed = (this.element.querySelector('.todo_completed').checked) ? iso_datetime : null;
+        var completed_checkbox_element = this.element.querySelector('.todo_completed');
+        var completed = (completed_checkbox_element && this.element.querySelector('.todo_completed').checked) ? iso_datetime : null;
         var data = {
             name: this.element.querySelector('.todo_name').value,
             description: this.element.querySelector('.todo_description').value,

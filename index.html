@@ -89,7 +89,7 @@
         <script id="todo_template" type="text/x-handlebars-template">
             <strong>Name:</strong><input type="text" class="todo_name" value="{{name}}" /><br>
             <strong>Description:</strong><input type="text" class="todo_description" value="{{description}}" /><br>
-            {{#if created}}<strong>Created:</strong>{{created}}<br>{{/if}}
+            {{#if created}}<strong>Created:</strong>{{created}}<br>
             <strong>Completed:</strong>
                 {{#if completed}}
                     {{completed}}
@@ -97,6 +97,7 @@
                     <input type="checkbox" class="todo_completed" />
                 {{/if}}
                 <br>
+            {{/if}}
             <button class="todo_save">Save</button>
         </script>
         <script src="https://google.github.io/traceur-compiler/bin/traceur.js"></script>
