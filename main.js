@@ -86,6 +86,17 @@ class TodosView extends View {
         container.appendChild(view.element);
         view.render();
     }
+    select_todo(id) {
+        var model = this.collection.get(id);
+        console.log("Edit TODO: ", id, model);
+        var view = new TodoView({
+            model: model
+        });
+        var container = this.element.querySelector('#edit_todo_container');
+        container.innerHTML = '';
+        container.appendChild(view.element);
+        view.render();
+    }
     edit_todo(event) {
         var id = event.target.dataset.id;
         var model = this.collection.get(id);
@@ -127,16 +138,33 @@ class TodosView extends View {
     }
 }
 
+class PageRouter extends Router {
+    constructor() {
+        super();
+        this.body_element = document.getElementsByTagName('body')[0];
+        this.collection = new Todos();
+        this.todos_view = new TodosView({
+            collection: this.collection
+        });
+
+        this.body_element.appendChild(this.todos_view.element);
+        this.todos_view.render();
+        this.collection.fetch(() => {
+            console.log(this.collection.serialize());
+        });
+    }
+    get routes() {
+        return {
+            '/todo/:todo_id': this.show_todo.bind(this)
+        }
+    }
+    show_todo(todo_id) {
+        console.log("Show Todo: ", todo_id);
+        this.todos_view.select_todo(todo_id);
+    }
+}
+
 (function() {
-    var collection = new Todos();
-    var todos_view = new TodosView({
-        collection: collection
-    });
-
-    document.getElementsByTagName('body')[0].appendChild(todos_view.element);
-    todos_view.render();
-
-    collection.fetch(() => {
-        console.log(collection.serialize());
-    });
+    var router = new PageRouter();
+    router.start();
 })();

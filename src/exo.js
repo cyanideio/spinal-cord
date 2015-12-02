@@ -318,8 +318,87 @@ class View extends EventEmitter {
 }
 
 class Router extends EventEmitter {
-    constructor() {
+    constructor(options) {
         super();
+        this.automatic_navigation = true;
+        if (options !== undefined) {
+            if (options.hasOwnProperty('automatic_navigation')) {
+                this.automatic_navigation = options.automatic_navigation;
+            }
+        }
+        this.update_routes();
+    }
+    update_routes() {
+        this.compiled_routes = [];
+        Object.keys(this.routes).forEach((regex_string) => {
+            var clean_string = this.clear_slashes(regex_string);
+            let parts = clean_string.split('/');
+
+            var new_parts = [];
+            parts.forEach((part) => {
+                if (part.startsWith(':')) {
+                    new_parts.push('(.+)');
+                } else {
+                    new_parts.push(part);
+                }
+            });
+            console.log("New Regexp String: ", '^' + new_parts.join('\/') + '$');
+            var regexp = new RegExp('^' + new_parts.join('\/') + '$', 'gi');
+
+            this.compiled_routes.push({
+                regexp: regexp,
+                callback: this.routes[regex_string]
+            });
+        });
+    }
+    get root() {
+        return '/';
+    }
+    get routes() {
+        return {};
+    }
+    navigate(path) {
+        path = this.clear_slashes(path);
+        history.pushState(null, null, this.root + path);
+        this.compiled_routes.forEach((route) => {
+            let result = route.regexp.exec(path);
+            if (result !== null) {
+                console.log(route, result);
+                route.callback.apply(this, result.slice(1));
+            }
+        });
+    }
+    popstate(event) {
+        //
+    }
+    clear_slashes(path) {
+        return path.toString().replace(/\/$/, '').replace(/^\//, '');
+    }
+    start() {
+        // Check for click events on a or button tags with href attributes, and navigate on click.
+        if (this.automatic_navigation) {
+            var body = document.getElementsByTagName('body')[0];
+            body.addEventListener("click", (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                console.log("Body Click");
+                let element = event.target;
+                if (MatchesSelector.call(element, 'a')) {
+                    // Check for href
+                    let href = element.getAttribute('href');
+                    console.log(element, href);
+                    if (href) {
+                        this.navigate(href);
+                    }
+                }
+            }, false);
+        }
+
+        // Handle window back button or history.back/history.go events.
+        window.onpopstate = this.popstate.bind(this);
+
+        // Navigate based on initial page state.
+        this.navigate(window.location.pathname);
     }
 }
 
