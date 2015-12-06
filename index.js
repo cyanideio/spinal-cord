@@ -89,6 +89,10 @@ app.delete('/api/todo/:todo_id', function(req, res) {
     });
 });
 
+app.get('/tests', function(req, res) {
+    res.sendFile(__dirname + '/tests/index.html');
+});
+
 app.get('*', function(req, res) {
     res.sendFile(__dirname + '/index.html');
 });

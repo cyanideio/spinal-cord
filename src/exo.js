@@ -276,6 +276,8 @@ class View extends EventEmitter {
             if (options.hasOwnProperty('collection')) {
                 this.collection = options.collection;
             }
+        } else {
+            this.element = document.createElement(this.tag);
         }
 
         // Bind Events

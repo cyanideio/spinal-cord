@@ -51,7 +51,6 @@ class EventEmitter {
         return found_listener;
     }
     emit(label, ...args) {
-        console.log("Event.emit", label);
         let found_listener = false;
 
         let listeners = this.listeners.get(label);

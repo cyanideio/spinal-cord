@@ -3,54 +3,9 @@
     <head>
         <meta charset="UTF-8">
         <title>Exo Test</title>
-        <style>
-            body {
-                background-color: #222;
-                color: white;
-                font-family: sans-serif;
-                font-size: 14px;
-            }
-
-            input {
-                background-color: black;
-                color: white;
-                border: 1px solid #444;
-            }
-
-            button {
-                background-color: #444;
-                border: 1px solid #666;
-                color: #AAA;
-            }
-
-            button:hover {
-                border: 1px solid white;
-                color: white;
-            }
-
-            table {
-                border: 1px solid #444;
-                border-collapse: collapse;
-                margin-top: 4px;
-            }
-
-            table thead tr {
-                background-color: #444;
-            }
-
-            table tbody tr:hover {
-                background-color: black;
-            }
-
-            table td {
-                border: 1px solid #444;
-                border-collapse: collapse;
-                padding: 4px;
-            }
-        </style>
         <script id="todos_template" type="text/x-handlebars-template">
-            <button class="create_button">Create</button><br>
-            <table>
+            <button class="create_button hx-btn">Create</button><br>
+            <table class="hx-table">
                 <thead>
                     <tr>
                         <td>Id</td>
@@ -76,9 +31,9 @@
                                 {{/if}}
                             </td>
                             <td>
-                                <button class="edit_todo" data-id="{{id}}">Edit</button>
-                                <button class="delete_todo" data-id="{{id}}">Delete</button>
-                                <a href="/todo/{{id}}">Nav Test</a>
+                                <button class="edit_todo hx-btn" data-id="{{id}}">Edit</button>
+                                <button class="delete_todo hx-btn" data-id="{{id}}">Delete</button>
+                                <a href="/todo/{{id}} hx-btn">Nav Test</a>
                             </td>
                         </tr>
                     {{/entries}}
@@ -99,10 +54,12 @@
                 {{/if}}
                 <br>
             {{/if}}
-            <button class="todo_save">Save</button>
+            <button class="todo_save hx-btn">Save</button>
         </script>
+        <link rel="stylesheet" href="bower_components/hexagon-js/dist/hexagon-dark/hexagon.css">
         <script src="https://google.github.io/traceur-compiler/bin/traceur.js"></script>
         <script src="https://google.github.io/traceur-compiler/src/bootstrap.js"></script>
+        <script src="bower_components/hexagon-js/dist/hexagon-dark/hexagon.js"></script>
         <script src="bower_components/handlebars/handlebars.js"></script>
         <script src="main.js" type="module"></script>
     </head>

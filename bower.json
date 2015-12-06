@@ -21,6 +21,9 @@
     "traceur": "~0.0.92",
     "traceur-runtime": "~0.0.92",
     "mustache.js": "mustache#~2.2.0",
-    "handlebars": "~4.0.5"
+    "handlebars": "~4.0.5",
+    "jasmine-core": "jasmine#~2.3.4",
+    "jasmine-reporters": "~2.0.7",
+    "hexagon-js": "~1.0.1"
   }
 }
