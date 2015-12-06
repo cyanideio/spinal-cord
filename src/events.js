@@ -1,3 +1,6 @@
+/*jshint esnext: true */
+/*jshint node: true */
+
 'use strict';
 
 // Modified from https://gist.github.com/datchley/37353d6a2cb629687eb9

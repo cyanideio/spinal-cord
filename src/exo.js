@@ -1,3 +1,6 @@
+/*jshint esnext: true */
+/*jshint node: true */
+
 'use strict';
 
 import {EventEmitter} from './events.js';
@@ -345,7 +348,7 @@ class Router extends EventEmitter {
                 }
             });
             console.log("New Regexp String: ", '^' + new_parts.join('\/') + '$');
-            var regexp = new RegExp('^' + new_parts.join('\/') + '$', 'gi');
+            var regexp = new RegExp('^' + new_parts.join('\/') + '$', 'i');
 
             this.compiled_routes.push({
                 regexp: regexp,
@@ -364,6 +367,7 @@ class Router extends EventEmitter {
         history.pushState(null, null, this.root + path);
         this.compiled_routes.forEach((route) => {
             let result = route.regexp.exec(path);
+            console.log("Route Check: ", route, path, result);
             if (result !== null) {
                 console.log(route, result);
                 route.callback.apply(this, result.slice(1));
@@ -381,14 +385,12 @@ class Router extends EventEmitter {
         if (this.automatic_navigation) {
             var body = document.getElementsByTagName('body')[0];
             body.addEventListener("click", (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                console.log("Body Click");
                 let element = event.target;
                 if (MatchesSelector.call(element, 'a')) {
+                    event.preventDefault();
+                    event.stopPropagation();
                     // Check for href
                     let href = element.getAttribute('href');
-                    console.log(element, href);
                     if (href) {
                         this.navigate(href);
                     }

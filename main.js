@@ -1,5 +1,29 @@
+/*jshint esnext: true */
+/*jshint node: true */
+
+'use strict';
+
 import {Model, View, Collection, Router, FetchFile} from './src/exo.js';
 // import {Handlebars} from './bower_components/handlebars/handlebars.js';
+
+/**
+ * You first need to create a formatting function to pad numbers to two digits…
+ **/
+function twoDigits(d) {
+    if(0 <= d && d < 10) return "0" + d.toString();
+    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+    return d.toString();
+}
+
+/**
+ * …and then create the method to output the date string as desired.
+ * Some people hate using prototypes this way, but if you are going
+ * to apply this to more than one Date object, having it as a prototype
+ * makes sense.
+ **/
+Date.prototype.toMysqlFormat = function() {
+    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+};
 
 class Todo extends Model {
     get url() {
@@ -32,7 +56,7 @@ class TodoView extends View {
     }
     save(event) {
         var d = new Date();
-        var iso_datetime = d.toISOString();
+        var iso_datetime = d.toMysqlFormat();
         var completed_checkbox_element = this.element.querySelector('.todo_completed');
         var completed = (completed_checkbox_element && this.element.querySelector('.todo_completed').checked) ? iso_datetime : null;
         var data = {
@@ -40,7 +64,6 @@ class TodoView extends View {
             description: this.element.querySelector('.todo_description').value,
             completed: completed
         };
-        console.log(data);
         this.model.save(data, (response) => {
             console.log("Model Save: ", response);
         });
@@ -72,7 +95,6 @@ class TodosView extends View {
         };
     }
     create_todo() {
-        console.log("Create TODO");
         var new_todo = new Todo();
         new_todo.addOneTimeListener('saved', () => {
             console.log("Add model to collection: ", new_todo);
@@ -88,7 +110,6 @@ class TodosView extends View {
     }
     select_todo(id) {
         var model = this.collection.get(id);
-        console.log("Edit TODO: ", id, model);
         var view = new TodoView({
             model: model
         });
@@ -122,7 +143,7 @@ class TodosView extends View {
         var completed = null;
         if (model.completed === null) {
             var d = new Date();
-            var iso_datetime = d.toISOString();
+            var iso_datetime = d.toMysqlFormat();
             completed = iso_datetime;
         }
         model.save({completed: completed}, () => {
@@ -159,7 +180,6 @@ class PageRouter extends Router {
         }
     }
     show_todo(todo_id) {
-        console.log("Show Todo: ", todo_id);
         this.todos_view.select_todo(todo_id);
     }
 }

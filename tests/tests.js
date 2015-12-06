@@ -1,3 +1,6 @@
+/*jshint esnext: true */
+/*jshint node: true */
+
 import {Model, View, Collection, Router, FetchFile} from '../src/exo.js';
 
 class TestModel extends Model {
