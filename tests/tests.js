@@ -1,9 +1,10 @@
 /*jshint esnext: true */
 /*jshint node: true */
 
-import {Model, View, Collection, Router, FetchFile} from '../src/exo.js';
+var Exo = require("../src/exo.js");
+// import {Model, View, Collection, Router, FetchFile} from '../src/exo.js';
 
-class TestModel extends Model {
+class TestModel extends Exo.Model {
     get defaults() {
         return {
             foo: 'bar',
@@ -15,13 +16,13 @@ class TestModel extends Model {
     }
 }
 
-class TestCollection extends Collection {
+class TestCollection extends Exo.Collection {
     get model() {
         return TestModel;
     }
 }
 
-class TestView extends View {
+class TestView extends Exo.View {
     constructor() {
         super();
     }
@@ -78,7 +79,11 @@ describe('Router', () => {
     });
 });
 
-(function() {
-    var jasmineEnv = jasmine.getEnv();
-    jasmineEnv.execute();
-})();
+describe('Ensure', () => {
+    it('should be able to wait on a provided methods results', () => {
+        expect(typeof Exo.Ensure(() => {return true;})).toEqual('object');
+
+        // TODO: NEED TO SET THIS UP TO BE A REAL ASYNC TEST!
+        Exo.Ensure(() => {return true;}).then(expect(true).toEqual(true));
+    });
+});

@@ -1,3 +1,88 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/*jshint esnext: true */
+/*jshint node: true */
+
+'use strict';
+
+// Modified from https://gist.github.com/datchley/37353d6a2cb629687eb9
+
+let isFunction = function(obj) {
+    return typeof obj == 'function' || false;
+};
+
+class EventEmitter {
+    constructor() {
+      this.listeners = new Map();
+      this.oneTimeListeners = new Map();
+    }
+    addListener(label, callback) {
+        this.listeners.has(label) || this.listeners.set(label, []);
+        this.listeners.get(label).push(callback);
+    }
+    addOneTimeListener(label, callback) {
+        this.oneTimeListeners.has(label) || this.oneTimeListeners.set(label, []);
+        this.oneTimeListeners.get(label).push(callback);
+    }
+    removeListener(label, callback) {
+        var found_listener = false;
+
+        let listeners = this.listeners.get(label), index;
+        if (listeners && listeners.length) {
+            index = listeners.reduce((i, listener, index) => {
+                return (isFunction(listener) && listener === callback) ? i = index : i;
+            }, -1);
+
+            if (index > -1) {
+                listeners.splice(index, 1);
+                this.listeners.set(label, listeners);
+                found_listener = true;
+            }
+        }
+
+        let oneTimeListeners = this.oneTimeListeners.get(label);
+        if (oneTimeListeners && oneTimeListeners.length) {
+            index = oneTimeListeners.reduce((i, listener, index) => {
+                return (isFunction(listener) && listener === callback) ? i = index : i;
+            }, -1);
+
+            if (index > -1) {
+                oneTimeListeners.splice(index, 1);
+                this.oneTimeListeners.set(label, oneTimeListeners);
+                found_listener = true;
+            }
+        }
+
+        return found_listener;
+    }
+    emit(label, ...args) {
+        let found_listener = false;
+
+        let listeners = this.listeners.get(label);
+        if (listeners && listeners.length) {
+            listeners.forEach((listener) => {
+                listener(...args);
+            });
+            found_listener = true;
+        }
+
+        let oneTimeListeners = this.oneTimeListeners.get(label);
+        if (oneTimeListeners && oneTimeListeners.length) {
+            oneTimeListeners.forEach((listener) => {
+                listener(...args);
+                this.removeListener(label, listener);
+            });
+            found_listener = true;
+        }
+
+        return found_listener;
+    }
+}
+
+// TODO: Uncomment when ES6 modules are fully supported at least in Chrome.
+//export {EventEmitter};
+module.exports = EventEmitter;
+
+},{}],2:[function(require,module,exports){
 /*jshint esnext: true */
 /*jshint node: true */
 
@@ -67,27 +152,9 @@ var MatchesSelector;
       doc.msMatchesSelector;
 })(document.documentElement);
 
-function Ensure(check_function) {
-    return new Promise(function(resolve, reject) {
-        (function WaitToEnsure() {
-            var complete = check_function();
-            console.log("Waiting...", complete);
-            if (complete) {
-                return resolve();
-            }
-            setTimeout(WaitToEnsure, 50);
-        })();
-    });
-}
-
 class Model extends EventEmitter {
-    // TODO: Uncomment this when function default args are supported.
-    //constructor(data={}) {
-    constructor(data) {
+    constructor(data={}) {
         super();
-        if (data === undefined) {
-            data = {};
-        }
         this.id = null;
         Object.assign(this, this.defaults, data);
     }
@@ -148,12 +215,7 @@ class Model extends EventEmitter {
     get defaults() {
         return {};
     }
-    // TODO: Uncomment this when function default args are supported.
-    //set(data, emit_change_event=true) {
-    set(data, emit_change_event) {
-        if (emit_change_event === undefined) {
-            emit_change_event = true;
-        }
+    set(data, emit_change_event=true) {
         var temp_data = Object.assign({}, this, data);
         try {
             this.validate(temp_data);
@@ -441,5 +503,6 @@ module.exports.View = View;
 module.exports.Router = Router;
 module.exports.ExoAJAX = ExoAJAX;
 module.exports.FetchFile = FetchFile;
-module.exports.Ensure = Ensure;
 module.exports.loaded_properly = loaded_properly;
+
+},{"./events.js":1}]},{},[2]);

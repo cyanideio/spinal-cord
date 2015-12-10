@@ -77,4 +77,6 @@ class EventEmitter {
     }
 }
 
-export {EventEmitter};
+// TODO: Uncomment when ES6 modules are fully supported at least in Chrome.
+//export {EventEmitter};
+module.exports = EventEmitter;

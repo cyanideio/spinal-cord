@@ -1,31 +1,29 @@
 /*jshint esnext: true */
 /*jshint node: true */
+/*jslint node: true */
 
 'use strict';
 
-import {Model, View, Collection, Router, FetchFile} from './src/exo.js';
-// import {Handlebars} from './bower_components/handlebars/handlebars.js';
+var Exo = require("../src/exo.js");
+// import {Model, View, Collection, Router, FetchFile} from '../src/exo.js';
 
-/**
- * You first need to create a formatting function to pad numbers to two digits…
- **/
 function twoDigits(d) {
-    if(0 <= d && d < 10) return "0" + d.toString();
-    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+    if (0 <= d && d < 10) {
+        return "0" + d.toString();
+    }
+
+    if (-10 < d && d < 0) {
+        return "-0" + (-1 * d).toString();
+    }
+
     return d.toString();
 }
 
-/**
- * …and then create the method to output the date string as desired.
- * Some people hate using prototypes this way, but if you are going
- * to apply this to more than one Date object, having it as a prototype
- * makes sense.
- **/
 Date.prototype.toMysqlFormat = function() {
     return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
 };
 
-class Todo extends Model {
+class Todo extends Exo.Model {
     get url() {
         return '/api/todo/';
     }
@@ -39,7 +37,7 @@ class Todo extends Model {
     }
 }
 
-class Todos extends Collection {
+class Todos extends Exo.Collection {
     get model() {
         return Todo;
     }
@@ -48,7 +46,7 @@ class Todos extends Collection {
     }
 }
 
-class TodoView extends View {
+class TodoView extends Exo.View {
     constructor(options) {
         super(options);
         this.model.addListener('change', this.render.bind(this));
@@ -80,7 +78,7 @@ class TodoView extends View {
     }
 }
 
-class TodosView extends View {
+class TodosView extends Exo.View {
     constructor(options) {
         super(options);
         this.template = Handlebars.compile(document.getElementById('todos_template').innerHTML);
@@ -159,18 +157,21 @@ class TodosView extends View {
     }
 }
 
-class PageRouter extends Router {
+class PageRouter extends Exo.Router {
     constructor() {
         super();
+        console.log(document.getElementsByTagName('body')[0]);
         this.body_element = document.getElementsByTagName('body')[0];
         this.collection = new Todos();
         this.todos_view = new TodosView({
             collection: this.collection
         });
 
+        this.collection_loaded = false;
         this.body_element.appendChild(this.todos_view.element);
         this.todos_view.render();
         this.collection.fetch(() => {
+            this.collection_loaded = true;
             console.log(this.collection.serialize());
         });
     }
@@ -180,11 +181,16 @@ class PageRouter extends Router {
         }
     }
     show_todo(todo_id) {
-        this.todos_view.select_todo(todo_id);
+        Exo.Ensure(() => {
+            return this.collection_loaded;
+        }).then(() => {
+            console.log("Waited until it was done");
+            this.todos_view.select_todo(todo_id);
+        });
     }
 }
 
-(function() {
+document.addEventListener("DOMContentLoaded", function() {
     var router = new PageRouter();
     router.start();
-})();
+});

@@ -1,0 +1,23 @@
+{
+  "name": "exo",
+  "description": "Yet another Backbone like framework, made with ES6",
+  "main": "index.js",
+  "authors": [
+    "Douglas Eugene Reisinger II <palodequeso@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/palodequeso/exo",
+  "moduleType": [
+    "es6"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "handlebars": "~4.0.5"
+  }
+}
