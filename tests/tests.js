@@ -14,20 +14,59 @@ class TestModel extends Exo.Model {
             }
         };
     }
+    validate(data) {
+        if (data.number === 1337) {
+            throw 'number is incorrect';
+        }
+    }
 }
 
 class TestCollection extends Exo.Collection {
     get model() {
         return TestModel;
     }
+    comparator(left, right) {
+        if (left.number < right.number) {
+            return -1;
+        } else if (left.number > right.number) {
+            return 1;
+        }
+        return 0;
+    }
 }
 
 class TestView extends Exo.View {
-    constructor() {
-        super();
+    constructor(options) {
+        super(options);
+        this.that_guy_clicked = false;
+    }
+    guy_clicked() {
+        this.that_guy_clicked = true;
+    }
+    get events() {
+        return {
+            'click .thatguy': this.guy_clicked.bind(this)
+        }
     }
     render() {
-        //
+        this.element.innerHTML = 'test content';
+    }
+}
+
+class TestRouter extends Exo.Router {
+    constructor() {
+        super({automatic_navigation: false});
+        this.show_test_called = false;
+        this.show_test_called_id = null;
+    }
+    show_test(test_id) {
+        this.show_test_called = true;
+        this.show_test_called_id = test_id;
+    }
+    get routes() {
+        return {
+            '/test/:test_id': this.show_test.bind(this)
+        };
     }
 }
 
@@ -46,20 +85,47 @@ describe('Model', () => {
         expect(test_model.number).toEqual(123);
         expect(test_model.anobj.snarf).toEqual('snarf');
     });
+    it('should be able to validate itself', () => {
+        var test_model = new TestModel();
+        test_model.addListener('invalid', (msg) => {
+            expect(msg).toEqual('number is incorrect');
+            console.log("Invalid: ", msg);
+        });
+        test_model.set({number: 1337});
+    });
 });
 
 describe('Collection', () => {
     it('should store models', () => {
-        //
+        let collection = new TestCollection([
+            new TestModel({id: 1})
+        ]);
+        console.log(collection);
+        expect(collection.models.length).toEqual(1);
     });
     it('should sort models', () => {
-        //
+        let collection = new TestCollection([
+            new TestModel({id: 2, number: 2}),
+            new TestModel({id: 1, number: 1}),
+            new TestModel({id: 3, number: 3})
+        ]);
+        expect(collection.models[0].number).toEqual(2);
+        expect(collection.models[1].number).toEqual(1);
+        expect(collection.models[2].number).toEqual(3);
+        collection.sort();
+        expect(collection.models[0].number).toEqual(1);
+        expect(collection.models[1].number).toEqual(2);
+        expect(collection.models[2].number).toEqual(3);
     });
     it('should allow adding models with a model', () => {
-        //
+        let collection = new TestCollection();
+        collection.add(new TestModel({id: 1}));
+        expect(collection.models.length).toEqual(1);
     });
     it('should allow adding models with an object', () => {
-        //
+        let collection = new TestCollection();
+        collection.add({id: 1});
+        expect(collection.models.length).toEqual(1);
     });
 });
 
@@ -68,14 +134,51 @@ describe('View', () => {
         var test_view = new TestView();
         expect(test_view.element.tagName.toLowerCase()).toEqual('div');
     });
+    it('should not create a default element when one is provided', () => {
+        var test_view = new TestView({element: document.createElement('span')});
+        expect(test_view.element.tagName.toLowerCase()).toEqual('span');
+    });
+    it('should render into its own element', () => {
+        var test_view = new TestView();
+        test_view.render();
+        expect(test_view.element.innerHTML).toEqual('test content');
+    });
+    it('should only bind to events within its own elements scope', () => {
+        var element = document.createElement('div');
+        element.innerHTML = '<button class="thatguy">That Guy</button>';
+        var another = document.createElement('div');
+        another.innerHTML = '<button class="thatguy">Another Guy</button>';
+        document.getElementsByTagName('body')[0].appendChild(another);
+        document.getElementsByTagName('body')[0].querySelector('.thatguy').click();
+        var test_view = new TestView({element: element});
+        expect(test_view.that_guy_clicked).toEqual(false);
+        test_view.element.querySelector('.thatguy').click();
+        expect(test_view.that_guy_clicked).toEqual(true);
+        another.innerHTML = '';
+    });
+    it('should be able to bind to model events', () => {
+        //
+    });
+    it('should be able to bind to collection events', () => {
+        //
+    });
 });
 
 describe('Router', () => {
     it('should be able to clean a location string', () => {
-        //
+        let router = new TestRouter();
+        expect(router.clear_slashes('/some/route/path/id/')).toEqual('some/route/path/id');
     });
     it('should build a regex from a route string', () => {
-        //
+        let router = new TestRouter();
+        expect(router.compiled_routes.length).toEqual(1);
+    });
+    it('should navigate to the correct route when invoked', () => {
+        let router = new TestRouter();
+        router.navigate('/test/25');
+        expect(router.show_test_called).toEqual(true);
+        expect(router.show_test_called_id).toEqual('25');
+        router.navigate('/');
     });
 });
 

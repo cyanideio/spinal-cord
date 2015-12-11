@@ -172,10 +172,13 @@ class Model extends EventEmitter {
 }
 
 class Collection extends EventEmitter {
-    constructor() {
+    constructor(model_data) {
         super();
         this.models = [];
         this.model_lookup = {};
+        if (model_data !== undefined) {
+            this.reset(model_data);
+        }
     }
     serialize() {
         var out = [];
@@ -292,6 +295,7 @@ class View extends EventEmitter {
     constructor(options) {
         super();
         if (options !== undefined) {
+            console.log(options);
             if (!options.hasOwnProperty('element')) {
                 this.element = document.createElement(this.tag);
                 this.element.setAttribute('class', this.class_name);
