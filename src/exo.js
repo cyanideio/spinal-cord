@@ -71,7 +71,6 @@ function Ensure(check_function) {
     return new Promise(function(resolve, reject) {
         (function WaitToEnsure() {
             var complete = check_function();
-            console.log("Waiting...", complete);
             if (complete) {
                 return resolve();
             }
@@ -91,10 +90,12 @@ class Model extends EventEmitter {
         this.id = null;
         Object.assign(this, this.defaults, data);
     }
+    get AjaxMethod() {
+        return ExoAJAX;
+    }
     sync(method, callback) {
         var data = this.serialize();
-        ExoAJAX(this.url, method, this.serialize(), (response) => {
-            console.log("Model.sync callback method=" + method);
+        this.AjaxMethod(this.url, method, this.serialize(), (response) => {
             if (method === "create" || method === "update") {
                 this.set(response, false);
                 this.emit("saved", this);
@@ -180,6 +181,9 @@ class Collection extends EventEmitter {
             this.reset(model_data);
         }
     }
+    get AjaxMethod() {
+        return ExoAJAX;
+    }
     serialize() {
         var out = [];
         this.models.forEach((model) => {
@@ -194,7 +198,7 @@ class Collection extends EventEmitter {
         return undefined;
     }
     fetch(callback) {
-        ExoAJAX(this.url, "read", {}, (response) => {
+        this.AjaxMethod(this.url, "read", {}, (response) => {
             this.emit("fetched");
             this.reset(response);
             if (callback !== undefined) {
@@ -295,7 +299,6 @@ class View extends EventEmitter {
     constructor(options) {
         super();
         if (options !== undefined) {
-            console.log(options);
             if (!options.hasOwnProperty('element')) {
                 this.element = document.createElement(this.tag);
                 this.element.setAttribute('class', this.class_name);
@@ -376,7 +379,6 @@ class Router extends EventEmitter {
                     new_parts.push(part);
                 }
             });
-            console.log("New Regexp String: ", '^' + new_parts.join('\/') + '$');
             var regexp = new RegExp('^' + new_parts.join('\/') + '$', 'i');
 
             this.compiled_routes.push({
@@ -396,9 +398,7 @@ class Router extends EventEmitter {
         history.pushState(null, null, this.root + path);
         this.compiled_routes.forEach((route) => {
             let result = route.regexp.exec(path);
-            console.log("Route Check: ", route, path, result);
             if (result !== null) {
-                console.log(route, result);
                 route.callback.apply(this, result.slice(1));
             }
         });
