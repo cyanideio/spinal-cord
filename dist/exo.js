@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*jshint esnext: true */
 /*jshint node: true */
 
@@ -152,16 +152,35 @@ var MatchesSelector;
       doc.msMatchesSelector;
 })(document.documentElement);
 
+function Ensure(check_function) {
+    return new Promise(function(resolve, reject) {
+        (function WaitToEnsure() {
+            var complete = check_function();
+            if (complete) {
+                return resolve();
+            }
+            setTimeout(WaitToEnsure, 50);
+        })();
+    });
+}
+
 class Model extends EventEmitter {
-    constructor(data={}) {
+    // TODO: Uncomment this when function default args are supported.
+    //constructor(data={}) {
+    constructor(data) {
         super();
+        if (data === undefined) {
+            data = {};
+        }
         this.id = null;
         Object.assign(this, this.defaults, data);
     }
+    get AjaxMethod() {
+        return ExoAJAX;
+    }
     sync(method, callback) {
         var data = this.serialize();
-        ExoAJAX(this.url, method, this.serialize(), (response) => {
-            console.log("Model.sync callback method=" + method);
+        this.AjaxMethod(this.url, method, this.serialize(), (response) => {
             if (method === "create" || method === "update") {
                 this.set(response, false);
                 this.emit("saved", this);
@@ -215,7 +234,12 @@ class Model extends EventEmitter {
     get defaults() {
         return {};
     }
-    set(data, emit_change_event=true) {
+    // TODO: Uncomment this when function default args are supported.
+    //set(data, emit_change_event=true) {
+    set(data, emit_change_event) {
+        if (emit_change_event === undefined) {
+            emit_change_event = true;
+        }
         var temp_data = Object.assign({}, this, data);
         try {
             this.validate(temp_data);
@@ -234,10 +258,16 @@ class Model extends EventEmitter {
 }
 
 class Collection extends EventEmitter {
-    constructor() {
+    constructor(model_data) {
         super();
         this.models = [];
         this.model_lookup = {};
+        if (model_data !== undefined) {
+            this.reset(model_data);
+        }
+    }
+    get AjaxMethod() {
+        return ExoAJAX;
     }
     serialize() {
         var out = [];
@@ -253,7 +283,7 @@ class Collection extends EventEmitter {
         return undefined;
     }
     fetch(callback) {
-        ExoAJAX(this.url, "read", {}, (response) => {
+        this.AjaxMethod(this.url, "read", {}, (response) => {
             this.emit("fetched");
             this.reset(response);
             if (callback !== undefined) {
@@ -434,7 +464,6 @@ class Router extends EventEmitter {
                     new_parts.push(part);
                 }
             });
-            console.log("New Regexp String: ", '^' + new_parts.join('\/') + '$');
             var regexp = new RegExp('^' + new_parts.join('\/') + '$', 'i');
 
             this.compiled_routes.push({
@@ -454,9 +483,7 @@ class Router extends EventEmitter {
         history.pushState(null, null, this.root + path);
         this.compiled_routes.forEach((route) => {
             let result = route.regexp.exec(path);
-            console.log("Route Check: ", route, path, result);
             if (result !== null) {
-                console.log(route, result);
                 route.callback.apply(this, result.slice(1));
             }
         });
@@ -503,6 +530,8 @@ module.exports.View = View;
 module.exports.Router = Router;
 module.exports.ExoAJAX = ExoAJAX;
 module.exports.FetchFile = FetchFile;
+module.exports.Ensure = Ensure;
 module.exports.loaded_properly = loaded_properly;
 
-},{"./events.js":1}]},{},[2]);
+},{"./events.js":1}]},{},[2])
+//# sourceMappingURL=exo.js.map
