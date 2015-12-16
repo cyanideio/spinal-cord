@@ -1,6 +1,8 @@
 /*jshint esnext: true */
 /*jshint node: true */
 
+'use strict';
+
 var Exo = require("../src/exo.js");
 // import {Model, View, Collection, Router, FetchFile} from '../src/exo.js';
 
@@ -18,7 +20,7 @@ function AJAXOverride(url, method, data, callback) {
     } else {
         callback(data);
     }
-};
+}
 
 class TestModel extends Exo.Model {
     get defaults() {
