@@ -6,6 +6,7 @@
 var Exo = require("../src/exo.js");
 // import {Model, View, Collection, Router, FetchFile} from '../src/exo.js';
 
+// TODO: Need reliable way to override this globally (for the library) so we can use it on backends too without needing to provide an alt for each model separately.
 function AJAXOverride(url, method, data, callback) {
     // console.log("EXO AJAX OVERRIDE: ", method, data);
     var fetch_method = {
