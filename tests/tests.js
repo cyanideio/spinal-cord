@@ -71,7 +71,7 @@ class TestView extends Exo.View {
     get events() {
         return {
             'click .thatguy': this.guy_clicked.bind(this)
-        }
+        };
     }
     render() {
         this.element.innerHTML = 'test content';
