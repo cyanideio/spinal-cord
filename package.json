@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/palodequeso/exo/issues"
   },
-  "homepage": "https://github.com/palodequeso/exo#readme"
+  "homepage": "https://github.com/palodequeso/exo#readme",
+  "dependencies": {
+    "jasmine": "^2.5.2"
+  }
 }

@@ -19,6 +19,12 @@ class Model extends EventEmitter {
 
         this.id = null;
         Object.assign(this, this.defaults, data);
+
+        Object.keys(this.types).forEach((property_name) => {
+            if (!(this[property_name] instanceof this.types[property_name])) {
+                this[property_name] = new this.types[property_name](this[property_name]);
+            }
+        });
     }
     destructor() {
         // TODO, look at View
