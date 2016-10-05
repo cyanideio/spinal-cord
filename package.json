@@ -1,20 +1,24 @@
 {
   "name": "exo",
   "version": "0.0.1",
-  "description": "Yet another Backbone like framework, made with ES6",
+  "description": "A modern-ish alternative to Backbone",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/palodequeso/exo.git"
+  },
+  "keywords": [
+    "mvc",
+    "es6",
+    "es7"
+  ],
+  "author": "Douglas Eugene Reisinger II",
   "license": "ISC",
-  "dependencies": {
-    "browserify": "^12.0.1",
-    "gulp": "^3.9.0",
-    "gulp-browserify": "^0.5.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-watch": "^4.3.5",
-    "urllib": "^2.5.0"
-  }
+  "bugs": {
+    "url": "https://github.com/palodequeso/exo/issues"
+  },
+  "homepage": "https://github.com/palodequeso/exo#readme"
 }
