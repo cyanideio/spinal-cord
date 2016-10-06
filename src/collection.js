@@ -77,6 +77,9 @@ class Collection extends EventEmitter {
             this.remove(model);
         });
 
+        if (!Array.isArray(data)) {
+            data = [];
+        }
         console.log(data);
         data.forEach((entry) => {
             this.add(entry);

@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/palodequeso/exo#readme",
   "dependencies": {
-    "jasmine": "^2.5.2"
+    "jasmine": "^2.5.2",
+    "uuid": "^2.0.3"
   }
 }
