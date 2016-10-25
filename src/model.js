@@ -20,6 +20,8 @@ class Model extends EventEmitter {
         this.id = null;
         Object.assign(this, this.defaults, data);
 
+        // TODO: Add some validation for a few non-class types, ints, floats, strings, arrays, objects, etc.
+        //  Auto-cooerce when possible to these types?
         Object.keys(this.types).forEach((property_name) => {
             if (!(this[property_name] instanceof this.types[property_name])) {
                 this[property_name] = new this.types[property_name](this[property_name]);

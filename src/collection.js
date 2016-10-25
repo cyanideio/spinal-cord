@@ -167,6 +167,10 @@ class Collection extends EventEmitter {
     }
     remove(data) {
         var model = this.models[data.__collection_id];
+        if (!model) {
+            return;
+        }
+
         model.removeListener("change", this.model_changed);
         model.removeListener("saved", this.model_saved);
         model.removeListener("fetched", this.model_fetched);
