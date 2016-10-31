@@ -37,8 +37,6 @@ function AjaxMethod(url, method, data, callback) {
         options.body = JSON.stringify(data);
     }
 
-    console.log(url, options);
-
     fetch(url, options).then((response) => {
         // response.text().then((text) => {
             // console.log("Text", text);

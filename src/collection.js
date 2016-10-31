@@ -80,7 +80,6 @@ class Collection extends EventEmitter {
         if (!Array.isArray(data)) {
             data = [];
         }
-        console.log(data);
         data.forEach((entry) => {
             this.add(entry);
         });
