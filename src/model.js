@@ -1,7 +1,7 @@
 'use strict';
 
-var EventEmitter = require('events').EventEmitter;
-var AjaxMethod = require('./ajax.js');
+const EventEmitter = require('events').EventEmitter;
+const AjaxMethod = require('./ajax.js');
 
 class Model extends EventEmitter {
     get defaults() {
