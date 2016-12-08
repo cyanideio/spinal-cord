@@ -8,7 +8,4 @@ module.exports = {
     AjaxMethod: AjaxMethod,
     Collection: Collection,
     Model: Model,
-    Router: Router,
-    Timer: Timer,
-    View: View
 };
