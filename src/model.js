@@ -38,7 +38,6 @@ class Model extends EventEmitter {
                     reject(error, response)
                     return
                 }
-
                 if (method === "create" || method === "update") {
                     this.set(response, false)
                     this.emit("saved", this)
@@ -72,7 +71,7 @@ class Model extends EventEmitter {
     serialize() {
         let _reserved_kwd = ['domain', '_events', '_eventsCount', '_maxListeners']
         var out = {}
-        Object.keys(Object.assign(this, this.defaults, {"id": null})).forEach((key) => {
+        Object.keys(Object.assign(this, this.defaults)).forEach((key) => {
             if (_reserved_kwd.indexOf(key) > -1) {
                 return 
             }

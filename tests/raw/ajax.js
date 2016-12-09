@@ -23,9 +23,9 @@ var user = new User({
 	mobile_hash: '17721070527'
 })
 
-try {
-	user.save().catch(e => console.log(e))
-} catch(e) {
-	console.log(e);
-}
-
+user.save().then(()=>{
+	setTimeout(()=>{
+		console.log(user.id)
+		user.delete()
+	}, 1000)
+})

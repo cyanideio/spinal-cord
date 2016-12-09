@@ -6,13 +6,13 @@ function AppendUrlId(url, data) {
         if (!url.endsWith('/')) {
             url += '/'
         }
-        url += data.id
+        url += `${data.id}/`
     }
     return url
 }
 
 function SyncMethod(url, method, data, callback) {
-    if (method !== "post") {
+    if (['delete', 'update'].indexOf(method) > -1) {
         url = AppendUrlId(url, data)
     }
 
@@ -34,21 +34,15 @@ function SyncMethod(url, method, data, callback) {
         uri: url,
     }
 
-        // if (data && (fetch_method === "PUT" || fetch_method === "POST")) {
-        //     options.body = JSON.stringify(data)
-        // }
-        // options.body = JSON.stringify(data)
-        // console.log(data)
-        options.body = data
-
+    // if (data && (fetch_method === "PUT" || fetch_method === "POST")) {
+    //     options.body = JSON.stringify(data)
+    // }
+    // options.body = JSON.stringify(data)
+    // console.log(data)
+    options.body = data
     request(options)
-        .then(function (repos) {
-            console.log(repos)
-        })
-        .catch(function (err) {
-            console.log(err)
-            // API call failed...
-        })
+    .then(res  => callback(undefined, res))
+    .catch(err => callback(err))
 }
 
 module.exports = SyncMethod
