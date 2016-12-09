@@ -1,4 +1,5 @@
 'use strict'
+
 const EventEmitter = require('events').EventEmitter
 const SyncMethod = require('./backends/restful-native')
 
@@ -68,6 +69,7 @@ class Model extends EventEmitter {
     validate(data) {
         //
     }
+
     serialize() {
         let _reserved_kwd = ['domain', '_events', '_eventsCount', '_maxListeners']
         var out = {}
@@ -89,6 +91,11 @@ class Model extends EventEmitter {
         })
         return out
     }
+
+    toJSON(){
+       return this.serialize() 
+    }
+
     get url() {
         return '/'
     }

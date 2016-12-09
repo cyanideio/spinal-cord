@@ -1,9 +1,10 @@
 const Model = require('../../src/model.js')
+const HOST = 'http://localhost:8000/api/v1'
 
 class User extends Model {
 
 	get url() {
-		return 'http://localhost:8000/api/v1/user/'
+		return `${HOST}/user/`
 	}
 		
 }
@@ -26,5 +27,5 @@ var _user = new User({id: 35})
 // var _user = new User({email: 'aa@aa.com'})
 
 _user.fetch().then(()=>{
-	console.log(_user)
+	console.log(_user.toJSON())
 })
