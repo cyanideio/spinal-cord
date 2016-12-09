@@ -10,7 +10,7 @@ function AppendUrlAttr(url, data) {
         if (!url.endsWith('/')) {
             url += '/'
         }
-        url += `?${querystring.stringify(data)}/`
+        url += `?${querystring.stringify(data, { encode: false })}/`
     }
 
     return url
