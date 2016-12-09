@@ -6,6 +6,21 @@ class User extends Model {
 	get url() {
 		return `${HOST}/user/`
 	}
+
+    parse(resp, options){
+    	if (resp.hasOwnProperty('objects')){
+    		if (resp.objects.length == 1) {
+    			return resp.objects[0]
+    		}
+			if (resp.objects.length == 0) {
+    			return {}
+    		} else {
+    			throw new Error('Duplicate Users')
+    		}
+    	}else{
+    		return resp
+    	}
+    }
 		
 }
 

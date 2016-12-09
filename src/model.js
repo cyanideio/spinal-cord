@@ -31,7 +31,13 @@ class Model extends EventEmitter {
     get SyncMethod() {
         return SyncMethod
     }
-    sync(method) {
+
+    parse(resp, options){
+        return resp
+    }
+
+    sync(method, options) {
+        options = options ? options : {}
         return new Promise((resolve, reject) => {
             this.SyncMethod(this.url, method, this.serialize(), (error, response) => {
                 if (error) {
@@ -39,19 +45,21 @@ class Model extends EventEmitter {
                     reject(error, response)
                     return
                 }
+                let serverAttrs = options.parse ? options.parse(response, options):this.parse(response, options)
                 if (method === "create" || method === "update") {
-                    this.set(response, false)
+                    this.set(serverAttrs, false)
                     this.emit("saved", this)
                 } else if (method === "read") {
-                    this.set(response, false)
+                    this.set(serverAttrs, false)
                     this.emit("fetched", this)
                 } else if (method === "delete") {
                     this.emit("deleted", this)
                 }
-                resolve(response)
+                resolve(serverAttrs)
             })
         })
     }
+
     save(data) {
         var args = arguments
         var method = this.id === null ? "create" : "update"

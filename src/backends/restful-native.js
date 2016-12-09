@@ -8,15 +8,12 @@ function fakeEncode(str) {
 
 function AppendUrlAttr(url, data) {
     if (data.hasOwnProperty('id')) {
-        return
-    }
-    if (data){
-        if (!url.endsWith('/')) {
-            url += '/'
+        return AppendUrlId(url, data)
+    } else {
+        if (!url.endsWith('/') && data) {
+            url += `/?${querystring.stringify(data, null, null, { encodeURIComponent: fakeEncode })}`
         }
-        url += `?${querystring.stringify(data, null, null, { encodeURIComponent: fakeEncode })}`
     }
-
     return url
 }
 
@@ -32,13 +29,13 @@ function AppendUrlId(url, data) {
 
 function SyncMethod(url, method, data, callback) {
 
-    if (['delete', 'update', 'read'].indexOf(method) > -1) {
+    if (['delete', 'update'].indexOf(method) > -1) {
         url = AppendUrlId(url, data)
     }
 
-    // if (method === 'read') {
-    //     url = AppendUrlAttr(url, data)
-    // }
+    if (method === 'read') {
+        url = AppendUrlAttr(url, data)
+    }
 
     var fetch_method = {
         "create": "POST",
