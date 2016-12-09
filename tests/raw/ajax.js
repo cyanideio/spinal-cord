@@ -5,12 +5,7 @@ class User extends Model {
 	get url() {
 		return 'http://10.0.20.105:8000/api/v1/user/'
 	}
-
-	get defaults() {
-		return {
-			is_admin: false
-		}
-	}			
+		
 }
 
 var user = new User({
@@ -23,9 +18,13 @@ var user = new User({
 	mobile_hash: '17721070527'
 })
 
-user.save().then(()=>{
-	setTimeout(()=>{
-		console.log(user.id)
-		user.delete()
-	}, 1000)
+// user.save()
+// 	.then(()=>{ return user.save({ mobile:'17711023333' }) })
+// 	// .then(()=> user.delete())
+
+// var _user = new User({id: 35})
+var _user = new User({email: 'aa@aa.com'})
+
+_user.fetch().then(()=>{
+	console.log(_user)
 })

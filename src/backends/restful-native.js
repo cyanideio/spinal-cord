@@ -1,5 +1,20 @@
 'use strict'
 const request = require('request-promise-native')
+const querystring = require('querystring')
+
+function AppendUrlAttr(url, data) {
+    if (data.hasOwnProperty('id')) {
+        return
+    }
+    if (data){
+        if (!url.endsWith('/')) {
+            url += '/'
+        }
+        url += `?${querystring.stringify(data)}/`
+    }
+
+    return url
+}
 
 function AppendUrlId(url, data) {
     if (data.hasOwnProperty('id')) {
@@ -12,8 +27,13 @@ function AppendUrlId(url, data) {
 }
 
 function SyncMethod(url, method, data, callback) {
-    if (['delete', 'update'].indexOf(method) > -1) {
+
+    if (['delete', 'update', 'read'].indexOf(method) > -1) {
         url = AppendUrlId(url, data)
+    }
+
+    if (method === 'read') {
+        url = AppendUrlAttr(url, data)
     }
 
     var fetch_method = {
