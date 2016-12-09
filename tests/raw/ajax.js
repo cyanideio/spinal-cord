@@ -3,7 +3,7 @@ const Model = require('../../src/model.js')
 class User extends Model {
 
 	get url() {
-		return 'http://10.0.20.105:8000/api/v1/user/'
+		return 'http://localhost:8000/api/v1/user/'
 	}
 		
 }
@@ -22,8 +22,8 @@ var user = new User({
 // 	.then(()=>{ return user.save({ mobile:'17711023333' }) })
 // 	// .then(()=> user.delete())
 
-// var _user = new User({id: 35})
-var _user = new User({email: 'aa@aa.com'})
+var _user = new User({id: 35})
+// var _user = new User({email: 'aa@aa.com'})
 
 _user.fetch().then(()=>{
 	console.log(_user)

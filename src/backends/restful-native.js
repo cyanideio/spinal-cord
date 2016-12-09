@@ -2,6 +2,10 @@
 const request = require('request-promise-native')
 const querystring = require('querystring')
 
+function fakeEncode(str) {
+    return str
+}
+
 function AppendUrlAttr(url, data) {
     if (data.hasOwnProperty('id')) {
         return
@@ -10,7 +14,7 @@ function AppendUrlAttr(url, data) {
         if (!url.endsWith('/')) {
             url += '/'
         }
-        url += `?${querystring.stringify(data, { encode: false })}/`
+        url += `?${querystring.stringify(data, null, null, { encodeURIComponent: fakeEncode })}`
     }
 
     return url
@@ -32,9 +36,9 @@ function SyncMethod(url, method, data, callback) {
         url = AppendUrlId(url, data)
     }
 
-    if (method === 'read') {
-        url = AppendUrlAttr(url, data)
-    }
+    // if (method === 'read') {
+    //     url = AppendUrlAttr(url, data)
+    // }
 
     var fetch_method = {
         "create": "POST",
