@@ -1,27 +1,18 @@
-const Model = require('../../src/model.js')
+'use strict'
+const TastypieModel = require('../../src/tastypie/model')
+
 const HOST = 'http://localhost:8000/api/v1'
 
-class User extends Model {
+class User extends TastypieModel {
 
-	get url() {
-		return `${HOST}/user/`
+	get resource_name() {
+		return 'user'
 	}
 
-    parse(resp, options){
-    	if (resp.hasOwnProperty('objects')){
-    		if (resp.objects.length == 1) {
-    			return resp.objects[0]
-    		}
-			if (resp.objects.length == 0) {
-    			return null
-    		} else {
-    			throw new Error('Duplicate Users')
-    		}
-    	}else{
-    		return resp
-    	}
-    }
-		
+	get host() {
+		return HOST
+	}
+
 }
 
 var user = new User({

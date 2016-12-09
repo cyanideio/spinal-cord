@@ -18,7 +18,7 @@
   "dependencies": {
     "request": "*",
     "request-promise-native": "*",
-    "jasmine": "^2.5.2",
+    "should": "*",
     "uuid": "^2.0.3"
   }
 }
