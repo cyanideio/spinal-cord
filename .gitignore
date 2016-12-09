@@ -32,3 +32,5 @@ build/Release
 
 example/dist*
 tests/dist*
+.DS_Store
+*.DS_Store
