@@ -32,7 +32,6 @@ class Model extends EventEmitter {
     }
     sync(method) {
         return new Promise((resolve, reject) => {
-            var data = this.serialize()
             this.SyncMethod(this.url, method, this.serialize(), (error, response) => {
                 if (error) {
                     console.error("Error with AJAX Method: ", this.url, method)
@@ -71,12 +70,15 @@ class Model extends EventEmitter {
         //
     }
     serialize() {
+        let _reserved_kwd = ['domain', '_events', '_eventsCount', '_maxListeners']
         var out = {}
-        Object.keys(Object.assign({}, this.defaults, {"id": null})).forEach((key) => {
+        Object.keys(Object.assign(this, this.defaults, {"id": null})).forEach((key) => {
+            if (_reserved_kwd.indexOf(key) > -1) {
+                return 
+            }
             if (key === "id" && this.id === null) {
                 return
             }
-
             out[key] = this[key]
             if (this[key] !== null && this[key] !== undefined && this[key].constructor.name) {
                 if (this[key].constructor.name !== 'String' && this[key].constructor.name !== 'Number' &&

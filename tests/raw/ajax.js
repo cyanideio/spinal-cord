@@ -15,11 +15,16 @@ class User extends Model {
 
 var user = new User({
 	username: 'frank',
-	password: '12345'
+	password: '12345',
+	email_hash: '1111111',
+	email: 'aa@aa.com',
+	username_clean: 'frank',
+	mobile: '17721070527',
+	mobile_hash: '17721070527'
 })
 
 try {
-	user.save()
+	user.save().catch(e => console.log(e))
 } catch(e) {
 	console.log(e);
 }

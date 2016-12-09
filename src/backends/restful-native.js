@@ -28,47 +28,27 @@ function SyncMethod(url, method, data, callback) {
     }
 
     var options = {
+        json: true,
         method: fetch_method,
-        headers: headers
+        headers: headers,
+        uri: url,
     }
 
-let options = {
-    method: 'POST',
-    uri: 'http://localhost:8000/api/v1/user/',
-    headers: {
-        'content-type': 'application/json'
-    },
-    body: {
-        username: 'frank'
-    },
-    json: true // Automatically parses the JSON string in the response
-}
+        // if (data && (fetch_method === "PUT" || fetch_method === "POST")) {
+        //     options.body = JSON.stringify(data)
+        // }
+        // options.body = JSON.stringify(data)
+        // console.log(data)
+        options.body = data
 
-rp(options)
-    .then(function (repos) {
-        console.log('User has %d repos', repos.length)
-    })
-    .catch(function (err) {
-        console.log(err)
-        // API call failed...
-    })
-
-
-    if (data && (fetch_method === "PUT" || fetch_method === "POST")) {
-        options.body = JSON.stringify(data)
-    }
-
-    fetch(url, options).then((response) => {
-        // response.text().then((text) => {
-            // console.log("Text", text)
-            // callback(null, JSON.parse(text))
-        // })
-        response.json().then((json) => {
-            callback(null, json)
+    request(options)
+        .then(function (repos) {
+            console.log(repos)
         })
-    }).catch((error) => {
-        callback(error, null)
-    })
+        .catch(function (err) {
+            console.log(err)
+            // API call failed...
+        })
 }
 
 module.exports = SyncMethod
