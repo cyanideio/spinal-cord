@@ -1,15 +1,9 @@
-'use strict';
-
+'use strict'
 var uuid = require('uuid');
 var EventEmitter = require('events').EventEmitter;
 var Model = require('./model.js');
-var AjaxMethod = require('./ajax.js');
+var SyncMethod = require('./backends/restful-native');
 
-// TODO: Get rid of jquery...
-// http://stackoverflow.com/questions/16493645/javascript-equivalent-of-jquerys-keyup-and-keydown
-// http://blog.garstasio.com/you-dont-need-jquery/events/
-
-// TODO: Lots to do in here, needs tests!
 class Collection extends EventEmitter {
     get model() {
         return Model;
@@ -17,8 +11,8 @@ class Collection extends EventEmitter {
     get url() {
         return '/';
     }
-    get AjaxMethod() {
-        return AjaxMethod;
+    get SyncMethod() {
+        return SyncMethod;
     }
     get indexes() {
         return [];
@@ -31,9 +25,6 @@ class Collection extends EventEmitter {
         if (model_data !== undefined) {
             this.reset(model_data);
         }
-    }
-    destructor() {
-        // TODO, look at View
     }
     serialize() {
         var out = [];
@@ -61,7 +52,7 @@ class Collection extends EventEmitter {
     }
     fetch(callback) {
         return new Promise((resolve, reject) => {
-            this.AjaxMethod(this.url, "read", {}, (error, response) => {
+            this.SyncMethod(this.url, "read", {}, (error, response) => {
                 if (error) {
                     reject(error, response);
                 } else {

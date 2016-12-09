@@ -1,27 +1,23 @@
 {
   "name": "exo",
   "version": "0.0.1",
-  "description": "A modern-ish alternative to Backbone",
+  "description": "Abstract Collection & Models inspired by Backbone.js",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/palodequeso/exo.git"
+    "url": "git+https://github.com/cyanideio/exo.git"
   },
-  "keywords": [
-    "mvc",
-    "es6",
-    "es7"
-  ],
-  "author": "Douglas Eugene Reisinger II",
+  "keywords": ["mvc", "es6", "es7"],
+  "author": "Yao Yuan",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/palodequeso/exo/issues"
-  },
-  "homepage": "https://github.com/palodequeso/exo#readme",
+  "bugs": { "url": "https://github.com/cyanideio/exo/issues" },
+  "homepage": "https://github.com/cyanideio/exo#readme",
   "dependencies": {
+    "request": "*",
+    "request-promise-native": "*",
     "jasmine": "^2.5.2",
     "uuid": "^2.0.3"
   }
