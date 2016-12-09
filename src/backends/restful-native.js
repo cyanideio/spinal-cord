@@ -10,8 +10,11 @@ function AppendUrlAttr(url, data) {
     if (data.hasOwnProperty('id')) {
         return AppendUrlId(url, data)
     } else {
-        if (!url.endsWith('/') && data) {
-            url += `/?${querystring.stringify(data, null, null, { encodeURIComponent: fakeEncode })}`
+        if (!url.endsWith('/')) {
+            url += '/'
+        }
+        if (data) {
+            url += `?${querystring.stringify(data, null, null, { encodeURIComponent: fakeEncode })}`
         }
     }
     return url

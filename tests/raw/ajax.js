@@ -13,7 +13,7 @@ class User extends Model {
     			return resp.objects[0]
     		}
 			if (resp.objects.length == 0) {
-    			return {}
+    			return null
     		} else {
     			throw new Error('Duplicate Users')
     		}
@@ -36,11 +36,16 @@ var user = new User({
 
 // user.save()
 // 	.then(()=>{ return user.save({ mobile:'17711023333' }) })
-// 	// .then(()=> user.delete())
+	// .then(()=> user.delete())
 
-var _user = new User({id: 35})
-// var _user = new User({email: 'aa@aa.com'})
+new User({ id: 35})
+	.fetch()
+	.then((res)=>{ console.log(res) })
 
-_user.fetch().then(()=>{
-	console.log(_user.toJSON())
-})
+new User({ email: 'aa@aa.com' })
+	.fetch()
+	.then((res)=>{ console.log(res) })
+
+new User({ email: 'aaa@aa.com' })
+	.fetch()
+	.then((res)=>{ console.log(res) })
