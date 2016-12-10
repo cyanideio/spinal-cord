@@ -4,7 +4,9 @@
   "description": "Abstract Collection & Models inspired by Backbone.js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build_docs": "jsdoc -c jsdoc.conf",
+    "test": "node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
+    "naked_test": "node ./node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",
