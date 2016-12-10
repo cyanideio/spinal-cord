@@ -6,3 +6,4 @@
 /____/ .___/_/_/ /_/\__,_/_/      \___/\____/_/   \__,_/   
     /_/                                                    
 ```
+[![Build Status](https://travis-ci.org/cyanideio/spinal-cord.svg?branch=master)](https://travis-ci.org/cyanideio/spinal-cord)
