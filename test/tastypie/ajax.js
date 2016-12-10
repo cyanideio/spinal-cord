@@ -1,5 +1,5 @@
 'use strict'
-const TastypieModel = require('../../src/tastypie/model')
+const TastypieModel = require('../../src/restful/tastypie')
 
 const HOST = 'http://localhost:8000/api/v1'
 
