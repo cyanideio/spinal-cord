@@ -1,5 +1,5 @@
 {
-  "name": "exo",
+  "name": "spinal-cord",
   "version": "0.0.1",
   "description": "Abstract Collection & Models inspired by Backbone.js",
   "main": "index.js",
@@ -8,17 +8,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cyanideio/exo.git"
+    "url": "git+https://github.com/cyanideio/spinal-cord.git"
   },
-  "keywords": ["mvc", "es6", "es7"],
+  "keywords": ["data", "es6", "es7", "collection", "model"],
   "author": "Yao Yuan",
   "license": "ISC",
-  "bugs": { "url": "https://github.com/cyanideio/exo/issues" },
-  "homepage": "https://github.com/cyanideio/exo#readme",
+  "bugs": { "url": "https://github.com/cyanideio/spinal-cord/issues" },
+  "homepage": "https://github.com/cyanideio/spinal-cord#readme",
   "dependencies": {
     "request": "*",
-    "request-promise-native": "*",
+    "request-promise-native": "*"
+  },
+  "devDependencies": {
+    "json-server": "*",
+    "jsdoc": "*",
+    "chai": "*",
+    "mocha": "*",
     "should": "*",
-    "uuid": "^2.0.3"
+    "supertest": "*",
+    "istanbul": "*",
+    "codecov.io": "*"
   }
 }
