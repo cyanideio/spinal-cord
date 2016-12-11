@@ -82,16 +82,13 @@ describe('Test Restful Backend', () => {
   })
 
   it('should fetch one model with same condition', (done) => {
+    let user = new User({ "email": "yaame.zhu@cyanide.io" })
     new User({ "email": "yaame.zhu@cyanide.io", "mobile": "13394058373"}).save()
-    .then((res)=>{ 
-      new User({ "email": "yaame.zhu@cyanide.io" }).save()
-      .then((res)=>{
-         let user = new User({ "email": "yaame.zhu@cyanide.io" })
-         user.get().then((res)=>{
-          user.should.have.property("mobile", "13394058373")
-          done()
-         })
-      })
+    .then((res)=>{ return new User({ "email": "yaame.zhu@cyanide.io" }).save() })
+    .then((res)=>{ return user.get() })
+    .then((res)=>{
+      user.should.have.property("mobile", "13394058373")
+      done()
     })
   })
 
