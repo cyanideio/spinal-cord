@@ -68,9 +68,15 @@ class Model extends EventEmitter {
         }
         return this.sync(method)
     }
-    fetch() {
+
+    // fetch() {
+    //     return this.sync("read")
+    // }
+
+    get() {
         return this.sync("read")
     }
+
     delete() {
         return this.sync("delete")
     }

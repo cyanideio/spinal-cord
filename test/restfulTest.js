@@ -25,14 +25,7 @@ class User extends RestfulModel {
 
   parse(resp, options){
     if (resp.constructor.name === 'Array'){
-      if (resp.length == 1) {
-        return resp[0]
-      }
-    if (resp.length == 0) {
-        return null
-      } else {
-        throw new Error('multiple results returned')
-      }
+      return resp.length ? resp[0] : null
     } else {
       return resp
     }
@@ -50,7 +43,7 @@ describe('Test Restful Backend', () => {
 
   it('should search by id', (done) => {
     new User({ id: "1" })
-    .fetch()
+    .get()
     .then((res)=>{ 
       res.should.have.property("username", "frank")
       done()
@@ -59,7 +52,7 @@ describe('Test Restful Backend', () => {
 
   it('should get model by attributes', (done) => {
     new User({ "email": "frank.yao@cyanide.io" })
-    .fetch()
+    .get()
     .then((res)=>{ 
       res.should.have.property("id", 1)
       done()
@@ -80,24 +73,42 @@ describe('Test Restful Backend', () => {
 
   it('should update model', (done) => {
     let user = new User({ "email": "yaame.zhu@cyanide.io" })
-    user.fetch()
-      .then(res =>{ return user.save({ "email": "yaame.zhu_1@cyanide.io" }) })
-      .then((res)=>{ 
-        res.should.have.property("email", "yaame.zhu_1@cyanide.io")
-        done()
-      })   
+    user.get()
+    .then(res =>{ return user.save({ "email": "yaame.zhu_1@cyanide.io" }) })
+    .then((res)=>{ 
+      res.should.have.property("email", "yaame.zhu_1@cyanide.io")
+      done()
+    })   
+  })
+
+  it('should fetch one model with same condition', (done) => {
+    new User({ "email": "yaame.zhu@cyanide.io", "mobile": "13394058373"}).save()
+    .then((res)=>{ 
+      new User({ "email": "yaame.zhu@cyanide.io" }).save()
+      .then((res)=>{
+         let user = new User({ "email": "yaame.zhu@cyanide.io" })
+         user.get().then((res)=>{
+          user.should.have.property("mobile", "13394058373")
+          done()
+         })
+      })
+    })
   })
 
   it('should delete model', (done) => {
-    let user = new User({ "email": "yaame.zhu_1@cyanide.io" })
-    user.fetch()
-      .then((res)=>{ return user.delete() })
-      .then((res)=>{ 
-        res.should.be.an.instanceOf(Object)
-        done()
-      })   
+    var user0 = new User({ "email": "yaame.zhu_1@cyanide.io" })
+    var user1 = new User({ "mobile": "13394058373" })
+    var user2 = new User({ "email": "yaame.zhu@cyanide.io" })
+    user0.get()
+    .then((res)=>{ return user0.delete() })
+    .then((res)=>{ return user1.get() })
+    .then((res)=>{ return user1.delete() })
+    .then((res)=>{ return user2.get() })
+    .then((res)=>{ return user2.delete() })
+    .then((res)=>{ 
+      res.should.be.an.instanceOf(Object)
+      done()
+    })
   })
-
-
 
 })
