@@ -48,7 +48,7 @@ describe('Test Restful Backend', () => {
     })
   })
 
-  it('should be able to search by id', (done) => {
+  it('should search by id', (done) => {
     new User({ id: "1" })
     .fetch()
     .then((res)=>{ 
@@ -57,7 +57,7 @@ describe('Test Restful Backend', () => {
     })
   })
 
-  it('should be able to get model by attrs', (done) => {
+  it('should get model by attributes', (done) => {
     new User({ "email": "frank.yao@cyanide.io" })
     .fetch()
     .then((res)=>{ 
@@ -65,5 +65,42 @@ describe('Test Restful Backend', () => {
       done()
     })
   })
+
+  it('should create model', (done) => {
+    new User({ 
+      "email": "yaame.zhu@cyanide.io",
+      "mobile": "13394058373"
+    })
+    .save()
+    .then((res)=>{ 
+      console.log(res)
+      res.should.have.property("mobile", "13394058373")
+      done()
+    })
+  })
+
+  it('should update model', (done) => {
+    let user = new User({ "email": "yaame.zhu@cyanide.io" })
+    user.fetch()
+      .then(res =>{ return user.save({ "email": "yaame.zhu_1@cyanide.io" }) })
+      .then((res)=>{ 
+        res.should.have.property("email", "yaame.zhu_1@cyanide.io")
+        console.log(res)
+        done()
+      })   
+  })
+
+  it('should delete model', (done) => {
+    let user = new User({ "email": "yaame.zhu_1@cyanide.io" })
+    user.fetch()
+      .then((res)=>{ return user.delete() })
+      .then((res)=>{ 
+        console.log(res)
+        res.should.be.an.instanceOf(Object)
+        done()
+      })   
+  })
+
+
 
 })

@@ -1,5 +1,11 @@
 {
   "user": [
-    { "id": 1, "username": "frank", "mobile": "17721070527", "email": "frank.yao@cyanide.io", "password": "123456" }
+    {
+      "id": 1,
+      "username": "frank",
+      "mobile": "17721070527",
+      "email": "frank.yao@cyanide.io",
+      "password": "123456"
+    }
   ]
 }
