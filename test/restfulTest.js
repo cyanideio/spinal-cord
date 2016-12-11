@@ -73,7 +73,6 @@ describe('Test Restful Backend', () => {
     })
     .save()
     .then((res)=>{ 
-      console.log(res)
       res.should.have.property("mobile", "13394058373")
       done()
     })
@@ -85,7 +84,6 @@ describe('Test Restful Backend', () => {
       .then(res =>{ return user.save({ "email": "yaame.zhu_1@cyanide.io" }) })
       .then((res)=>{ 
         res.should.have.property("email", "yaame.zhu_1@cyanide.io")
-        console.log(res)
         done()
       })   
   })
@@ -95,7 +93,6 @@ describe('Test Restful Backend', () => {
     user.fetch()
       .then((res)=>{ return user.delete() })
       .then((res)=>{ 
-        console.log(res)
         res.should.be.an.instanceOf(Object)
         done()
       })   
