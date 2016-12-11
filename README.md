@@ -9,4 +9,16 @@
 [![Build Status](https://travis-ci.org/cyanideio/spinal-cord.svg?branch=master)](https://travis-ci.org/cyanideio/spinal-cord) [![Coverage Status](https://coveralls.io/repos/github/cyanideio/spinal-cord/badge.svg?branch=master)](https://coveralls.io/github/cyanideio/spinal-cord?branch=master)
 
 # Spinal-Cord
+## Overview
 This project is inspired by __backbone.js__'s data layer, i.e __Collections__ and __Models__. 
+It allows users to manipulate data objects with classical __backbone.js__ style syntax, on both frontend and backend.
+
+## Backends
+On the spinal-cord roadmap. We plan to support different backends as data store. Including:
+- Restful API (Server Side & Client Side)
+- IndexDB (In the browser)
+- LocalStorage (KVDB in Browser)
+- Redis (KVDB on Server)
+
+# Change Log
+Please Refer to https://github.com/cyanideio/spinal-cord/releases
