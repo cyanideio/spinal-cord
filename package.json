@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build_docs": "jsdoc -c jsdoc.conf",
-    "test": "node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
-    "naked_test": "node ./node_modules/mocha/bin/mocha"
+    "test": "node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec"
   },
   "repository": {
     "type": "git",
@@ -29,6 +28,7 @@
     "should": "*",
     "supertest": "*",
     "istanbul": "*",
-    "codecov.io": "*"
+    "coveralls": "*",
+    "mocha-lcov-reporter": "*"
   }
 }

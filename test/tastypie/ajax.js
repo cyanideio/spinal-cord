@@ -25,18 +25,18 @@ var user = new User({
 	mobile_hash: '17721070527'
 })
 
-// user.save()
-// 	.then(()=>{ return user.save({ mobile:'17711023333' }) })
-	// .then(()=> user.delete())
+user.save()
+	.then(()=>{ return user.save({ mobile:'17711023333' }) })
+	.then(()=> user.delete())
 
-new User({ id: 35})
-	.fetch()
-	.then((res)=>{ console.log(res) })
+// new User({ id: 35})
+// 	.fetch()
+// 	.then((res)=>{ console.log(res) })
 
-new User({ email: 'aa@aa.com' })
-	.fetch()
-	.then((res)=>{ console.log(res) })
+// new User({ email: 'aa@aa.com' })
+// 	.fetch()
+// 	.then((res)=>{ console.log(res) })
 
-new User({ email: 'aaa@aa.com' })
-	.fetch()
-	.then((res)=>{ console.log(res) })
+// new User({ email: 'aaa@aa.com' })
+// 	.fetch()
+// 	.then((res)=>{ console.log(res) })
