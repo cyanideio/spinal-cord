@@ -7,7 +7,6 @@
     /_/                                                    
 ```
 [![Build Status](https://travis-ci.org/cyanideio/spinal-cord.svg?branch=master)](https://travis-ci.org/cyanideio/spinal-cord) [![Coverage Status](https://coveralls.io/repos/github/cyanideio/spinal-cord/badge.svg?branch=master)](https://coveralls.io/github/cyanideio/spinal-cord?branch=master)
-
 # Spinal-Cord
 ## Overview
 This project is inspired by __backbone.js__'s data layer, i.e __Collections__ and __Models__. 
