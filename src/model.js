@@ -3,19 +3,31 @@
 const EventEmitter = require('events').EventEmitter
 const SyncMethod = require('./backends/restful-native')
 
-// <<<<<<<<<<
-// Is it Model replace the Backbone.Model?
+/**
+ * Model to Replace Backbone.Model
+ */
 class Model extends EventEmitter {
-    // <<<<<<<<<
-    // defaults setting?
+
+    /**
+     * Returns {} for data by default
+     * @return Object
+     */
     get defaults() {
         return {}
     }
-    // <<<<<<<<<
-    // what types?
+
+    /**
+     * Types for attributes
+     * @return Object
+     */
     get types() {
         return {}
     }
+
+    /**
+     * Constructor
+     * @param  Object data Input Model Data
+     */
     constructor(data) {
         super()
 
