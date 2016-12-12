@@ -1,6 +1,7 @@
 'use strict'
 const should = require('should');
 const RestfulModel = require('../src/restful/model')
+const RestfulCollection = require('../src/restful/collection')
 
 let App = require('json-server')
 let server = App.create()
@@ -29,6 +30,22 @@ class User extends RestfulModel {
     } else {
       return resp
     }
+  }
+
+}
+
+class Users extends RestfulCollection {
+
+  get model() {
+    return User
+  }
+
+  get resource_name() {
+    return 'user'
+  }
+
+  get host() {
+    return 'http://localhost:3000'
   }
 
 }
@@ -106,6 +123,21 @@ describe('Test Restful Backend', () => {
       res.should.be.an.instanceOf(Object)
       done()
     })
+  })
+
+  it('should get models (with collection)', (done) => {
+    let users = new Users()
+    users.fetch()
+    .then((res)=>{
+      users.length.should.equal(1)
+      done()
+    })
+  })
+
+  it('should add models (with collection)', (done) => {
+    let users = new Users()
+    users.add({"email": "yaame.zhu@cyanide.io"})
+    done()
   })
 
 })
