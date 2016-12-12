@@ -35,13 +35,6 @@ class User extends RestfulModel {
     return 'http://your-nice-server.com'
   }
 
-  parse(resp, options){
-    if (resp.constructor.name === 'Array'){
-      return resp.length ? resp[0] : null
-    } else {
-      return resp
-    }
-  }
 }
 
 var user0 = new User({ "email": "yaame.zhu_1@cyanide.io" })

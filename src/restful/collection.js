@@ -15,9 +15,13 @@ class RestfulCollection extends Collection {
 		return `${this.host}/${this.resource_name}/`
 	}
 
-    parse(resp, options){
-        return resp
+  parse(resp, options){
+    if (resp.constructor.name === 'Array'){
+      return resp.length ? resp[0] : null
+    } else {
+      return resp
     }
+  }
 		
 }
 
