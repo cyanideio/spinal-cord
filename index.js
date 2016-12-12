@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
-const AjaxMethod = require('./src/ajax.js');
-const Collection = require('./src/collection.js');
-const Model = require('./src/model.js');
+const AjaxMethod = require('./src/ajax.js')
+const Collection = require('./src/collection.js')
+const Model = require('./src/model.js')
 
 module.exports = {
     AjaxMethod: AjaxMethod,
     Collection: Collection,
     Model: Model,
-};
+}
