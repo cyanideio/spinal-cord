@@ -132,7 +132,7 @@ class Collection extends EventEmitter {
     }
 
     where(attrs, first) {
-        return this.serialize(). 
+        return this.serialize() 
     }
 
     findWhere(attrs) {
