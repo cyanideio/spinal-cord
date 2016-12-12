@@ -162,7 +162,10 @@ describe('Test Restful Backend', () => {
     .then((res)=>{ return users.findWhere({ email : "yaame.zhu_1@cyanide.io" }).delete()  })
     .then((res)=>{ return users.findWhere({ email : "yaame.zhu_2@cyanide.io" }).delete()  })
     .then((res)=>{ return users.findWhere({ email : "yaame.zhu_3@cyanide.io" }).delete()  })
-    .then((res)=>{ done() })
+    .then((res)=>{ 
+      users.length.should.equal(1)
+      done() 
+    })
   }) 
 
 })
