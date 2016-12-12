@@ -19,5 +19,48 @@ On the spinal-cord roadmap. We plan to support different backends as data store.
 - LocalStorage (KVDB in Browser)
 - Redis (KVDB on Server)
 
+## Examples
+```javascript
+'use strict'
+const RestfulModel = require('../src/restful/model')
+
+class User extends RestfulModel {
+
+  get resource_name() {
+    return 'user'
+  }
+
+  get host() {
+    return 'http://your-nice-server.com'
+  }
+
+  parse(resp, options){
+    if (resp.constructor.name === 'Array'){
+      return resp.length ? resp[0] : null
+    } else {
+      return resp
+    }
+  }
+}
+
+var user0 = new User({ "email": "yaame.zhu_1@cyanide.io" })
+var user1 = new User({ "mobile": "13394058373" })
+var user2 = new User({ "email": "yaame.zhu@cyanide.io" })
+user0.get()
+.then((res)=>{ return user0.delete() })
+.then((res)=>{ return user1.get() })
+.then((res)=>{ return user1.delete() })
+.then((res)=>{ return user2.get() })
+.then((res)=>{ return user2.delete() })
+
+let user = new User({ "email": "yaame.zhu@cyanide.io" })
+user.get()
+.then(res =>{ return user.save({ "email": "yaame.zhu_1@cyanide.io" }) })
+.then((res)=>{ 
+	// do your stuff here
+}) 
+
+```
+
 # Change Log
 Please Refer to https://github.com/cyanideio/spinal-cord/releases
