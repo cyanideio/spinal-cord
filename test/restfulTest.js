@@ -137,7 +137,20 @@ describe('Test Restful Backend', () => {
   it('should add models (with collection)', (done) => {
     let users = new Users()
     users.add({"email": "yaame.zhu@cyanide.io"})
+    users.length.should.equal(1)
     done()
   })
+
+  it('should create models (with collection)', (done) => {
+    let users = new Users()
+    users.create({"email": "yaame.zhu@cyanide.io"})
+    .then((res)=>{
+      res.should.be.instanceOf(User)
+      return res.delete()
+    })
+    .then((res)=>{
+      done()
+    }) 
+  }) 
 
 })

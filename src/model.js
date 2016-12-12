@@ -85,7 +85,7 @@ class Model extends EventEmitter {
     }
 
     serialize() {
-        let _reserved_kwd = ['domain', '_events', '_eventsCount', '_maxListeners']
+        let _reserved_kwd = ['domain', '_events', '_eventsCount', '_maxListeners', '__collection_id']
         var out = {}
         Object.keys(Object.assign(this, this.defaults)).forEach((key) => {
             if (_reserved_kwd.indexOf(key) > -1) {
