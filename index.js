@@ -1,6 +1,6 @@
 'use strict'
 
-const AjaxMethod = require('./src/ajax')
+const AjaxMethod = require('./src/backends/ajax')
 const RestNative = require('./src/backends/restful-native')
 const Collection = require('./src/collection')
 const Model = require('./src/model')
