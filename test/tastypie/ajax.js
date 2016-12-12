@@ -1,6 +1,6 @@
 'use strict'
-const TastypieModel = require('../../src/restful/tastypie')
 
+const TastypieModel = require('../../src/restful/tastypie_model')
 const HOST = 'http://localhost:8000/api/v1'
 
 class User extends TastypieModel {
@@ -27,16 +27,16 @@ var user = new User({
 
 // user.save()
 // 	.then(()=>{ return user.save({ mobile:'17711023333' }) })
-	// .then(()=> user.delete())
+// 	.then(()=> user.delete())
 
 new User({ id: 35})
-	.fetch()
+	.get()
 	.then((res)=>{ console.log(res) })
 
-new User({ email: 'aa@aa.com' })
-	.fetch()
-	.then((res)=>{ console.log(res) })
+// new User({ email: 'aa@aa.com' })
+// 	.get()
+// 	.then((res)=>{ console.log(res) })
 
-new User({ email: 'aaa@aa.com' })
-	.fetch()
-	.then((res)=>{ console.log(res) })
+// new User({ email: 'aaa@aa.com' })
+// 	.get()
+// 	.then((res)=>{ console.log(res) })

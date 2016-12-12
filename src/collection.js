@@ -130,6 +130,56 @@ class Collection extends EventEmitter {
         this.remove(model);
         //this.emit("change"); // Already fired in remove.
     }
+
+    where(attr) {
+        let key = Object.keys(attr)[0]
+        return this.toArray().filter((element)=>{
+            return element[key] == attr[key]
+        })
+    }
+
+    toArray() {
+        return Object.keys(this.models).map((key)=>{
+            return this.models[key]
+        })
+    }
+
+    findWhere(attr) {
+        return this.where(attr)[0]
+    }
+
+    create(model, options) {
+        options = options ? options : {}
+        let wait = options.wait
+        model = this._prepareModel(model, options)
+        if (!model) return false
+        if (!wait) this.add(model, options)
+        var collection = this
+        return model.save().then((res)=>{
+            return new Promise((resolve, reject)=>{
+                if (wait) collection.add(model)
+                resolve(model)
+            })
+        })
+    }
+
+    _prepareModel(attrs, options) {
+        if (this._isModel(attrs)) {
+            if (!attrs.collection) attrs.collection = this
+            return attrs
+        }
+        options = options ? options : {}
+        options.collection = this
+        let model = new this.model(attrs, options)
+        if (!model.validationError) return model
+        this.trigger('invalid', this, model.validationError, options)
+        return false
+    }
+
+    _isModel(model) {
+      return model instanceof Model
+    }
+
     add(data) {
         var model;
         // There's probably a better way to identify objects vs models.
