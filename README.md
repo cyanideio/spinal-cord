@@ -24,6 +24,7 @@ On the spinal-cord roadmap. We plan to support different backends as data store.
 'use strict'
 const RestfulModel = require('spinal-cord').RestfulModel
 
+// Using Restful Backend
 class User extends RestfulModel {
 
   get resource_name() {
@@ -47,15 +48,16 @@ var user0 = new User({ "email": "yaame.zhu_1@cyanide.io" })
 var user1 = new User({ "mobile": "13394058373" })
 var user2 = new User({ "email": "yaame.zhu@cyanide.io" })
 user0.get()
-.then((res)=>{ return user0.delete() })
-.then((res)=>{ return user1.get() })
-.then((res)=>{ return user1.delete() })
-.then((res)=>{ return user2.get() })
-.then((res)=>{ return user2.delete() })
+.then((res)=>{ return user0.delete() })    // Delete user0
+.then((res)=>{ return user1.get() })       // Fetch user1 from Server
+.then((res)=>{ return user1.delete() })    // Delete user1
+.then((res)=>{ return user2.get() })       // Fetch user2 from Server
+.then((res)=>{ return user2.delete() })    // Delete user2
 
 let user = new User({ "email": "yaame.zhu@cyanide.io" })
-user.get()
+user.get()                                 // Get user
 .then(res =>{ return user.save({ "email": "yaame.zhu_1@cyanide.io" }) })
+                                           // Modify user
 .then((res)=>{ 
 	// do your stuff here
 }) 

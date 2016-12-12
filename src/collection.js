@@ -131,6 +131,14 @@ class Collection extends EventEmitter {
         //this.emit("change"); // Already fired in remove.
     }
 
+    where(attrs, first) {
+        return this.serialize() 
+    }
+
+    findWhere(attrs) {
+      return this.where(attrs, true);
+    }
+
     create(model, options) {
         options = options ? options : {}
         let wait = options.wait

@@ -156,11 +156,12 @@ describe('Test Restful Backend', () => {
   it('should merge models (with collection)', (done) => {
     let users = new Users()
     users.fetch()
-    .then(res=>{ users.create({"email": "yaame.zhu_1@cyanide.io"}) })
-    .then(res=>{ users.create({"email": "yaame.zhu_2@cyanide.io"}) })
-    .then(res=>{ users.create({"email": "yaame.zhu_3@cyanide.io"}) })
+    .then(res=>{ return users.create({"email": "yaame.zhu_1@cyanide.io"}, { wait: true }) })
+    .then(res=>{ return users.create({"email": "yaame.zhu_2@cyanide.io"}, { wait: true }) })
+    .then(res=>{ return users.create({"email": "yaame.zhu_3@cyanide.io"}, { wait: true }) })
     .then((res)=>{
       users.length.should.equal(4)
+      console.log(users.serialize())
       done()
     }) 
   }) 

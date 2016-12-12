@@ -1,6 +1,6 @@
 'use strict'
-const TastypieModel = require('../../src/restful/tastypie_model')
 
+const TastypieModel = require('../../src/restful/tastypie_model')
 const HOST = 'http://localhost:8000/api/v1'
 
 class User extends TastypieModel {
