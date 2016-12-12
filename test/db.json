@@ -6,6 +6,18 @@
       "mobile": "17721070527",
       "email": "frank.yao@cyanide.io",
       "password": "123456"
+    },
+    {
+      "email": "yaame.zhu_1@cyanide.io",
+      "id": 2
+    },
+    {
+      "email": "yaame.zhu_2@cyanide.io",
+      "id": 3
+    },
+    {
+      "email": "yaame.zhu_3@cyanide.io",
+      "id": 4
     }
   ]
 }
