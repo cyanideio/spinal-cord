@@ -153,17 +153,16 @@ describe('Test Restful Backend', () => {
     }) 
   }) 
 
-  it('should merge models (with collection)', (done) => {
+  it('should create and findWhere', (done) => {
     let users = new Users()
     users.fetch()
     .then(res=>{ return users.create({"email": "yaame.zhu_1@cyanide.io"}, { wait: true }) })
     .then(res=>{ return users.create({"email": "yaame.zhu_2@cyanide.io"}, { wait: true }) })
     .then(res=>{ return users.create({"email": "yaame.zhu_3@cyanide.io"}, { wait: true }) })
-    .then((res)=>{
-      users.length.should.equal(4)
-      console.log(users.serialize())
-      done()
-    }) 
+    .then((res)=>{ return users.findWhere({ email : "yaame.zhu_1@cyanide.io" }).delete()  })
+    .then((res)=>{ return users.findWhere({ email : "yaame.zhu_2@cyanide.io" }).delete()  })
+    .then((res)=>{ return users.findWhere({ email : "yaame.zhu_3@cyanide.io" }).delete()  })
+    .then((res)=>{ done() })
   }) 
 
 })

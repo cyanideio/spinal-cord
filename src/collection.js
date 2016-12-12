@@ -131,12 +131,21 @@ class Collection extends EventEmitter {
         //this.emit("change"); // Already fired in remove.
     }
 
-    where(attrs, first) {
-        return this.serialize() 
+    where(attr) {
+        let key = Object.keys(attr)[0]
+        return this.toArray().filter((element)=>{
+            return element[key] == attr[key]
+        })
     }
 
-    findWhere(attrs) {
-      return this.where(attrs, true);
+    toArray() {
+        return Object.keys(this.models).map((key)=>{
+            return this.models[key]
+        })
+    }
+
+    findWhere(attr) {
+        return this.where(attr)[0]
     }
 
     create(model, options) {
