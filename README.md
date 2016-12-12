@@ -22,7 +22,7 @@ On the spinal-cord roadmap. We plan to support different backends as data store.
 ## Examples
 ```javascript
 'use strict'
-const RestfulModel = require('../src/restful/model')
+const RestfulModel = require('spinal-cord').RestfulModel
 
 class User extends RestfulModel {
 
