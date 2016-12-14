@@ -69,23 +69,29 @@ class Model extends EventEmitter {
         // Backbone Model return a xhr here, are you sure it is ok?
         options = options ? options : {}
         return new Promise((resolve, reject) => {
-            this.SyncMethod(this.url, method, this.serialize(), (error, response) => {
-                if (error) {
-                    console.error("Error with AJAX Method: ", this.url, method)
-                    reject(error, response)
-                    return
+            this.SyncMethod({
+                url:this.url, 
+                method: method, 
+                serialize: this.serialize(),
+                options: options,
+                callback: (error, response) => {
+                    if (error) {
+                        console.error("Error with AJAX Method: ", this.url, method)
+                        reject(error, response)
+                        return
+                    }
+                    let serverAttrs = options.parse ? options.parse(response, options):this.parse(response, options)
+                    if (method === "create" || method === "update") {
+                        this.set(serverAttrs, false)
+                        this.emit("saved", this)
+                    } else if (method === "read") {
+                        this.set(serverAttrs, false)
+                        this.emit("fetched", this)
+                    } else if (method === "delete") {
+                        this.emit("deleted", this)
+                    }
+                    resolve(serverAttrs)
                 }
-                let serverAttrs = options.parse ? options.parse(response, options):this.parse(response, options)
-                if (method === "create" || method === "update") {
-                    this.set(serverAttrs, false)
-                    this.emit("saved", this)
-                } else if (method === "read") {
-                    this.set(serverAttrs, false)
-                    this.emit("fetched", this)
-                } else if (method === "delete") {
-                    this.emit("deleted", this)
-                }
-                resolve(serverAttrs)
             })
         })
     }

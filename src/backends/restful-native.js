@@ -30,8 +30,11 @@ function AppendUrlId(url, data) {
     return url
 }
 
-function SyncMethod(url, method, data, callback) {
-
+function SyncMethod(opt) {
+    var url = opt.url;
+    var method = opt.method;
+    var data = opt.data;
+    var callback = opt.callback;
     if (['delete', 'update'].indexOf(method) > -1) {
         url = AppendUrlId(url, data)
     }
