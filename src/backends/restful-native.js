@@ -27,7 +27,7 @@ function AppendUrlId(url, data, pk) {
         if (!url.endsWith('/')) {
             url += '/'
         }
-        url += `${data.id}/`
+        url += `${data[pk]}/`
     }
     return url
 }
