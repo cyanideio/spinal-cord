@@ -52,7 +52,7 @@ class Collection extends EventEmitter {
     }
     fetch(callback) {
         return new Promise((resolve, reject) => {
-            this.SyncMethod(this.url, "read", {}, (error, response) => {
+            this.SyncMethod(this.url, "read", {}, undefined, (error, response) => {
                 if (error) {
                     reject(error, response);
                 } else {
