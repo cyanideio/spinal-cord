@@ -6,8 +6,9 @@ function fakeEncode(str) {
     return str
 }
 
-function AppendUrlAttr(url, data) {
-    if (data.hasOwnProperty('id')) {
+function AppendUrlAttr(url, data, pk) {
+    pk = pk ? pk : 'id'
+    if (data.hasOwnProperty(pk)) {
         return AppendUrlId(url, data)
     } else {
         if (!url.endsWith('/')) {
@@ -20,8 +21,9 @@ function AppendUrlAttr(url, data) {
     return url
 }
 
-function AppendUrlId(url, data) {
-    if (data.hasOwnProperty('id')) {
+function AppendUrlId(url, data, pk) {
+    pk = pk ? pk : 'id'
+    if (data.hasOwnProperty(pk)) {
         if (!url.endsWith('/')) {
             url += '/'
         }
@@ -30,14 +32,14 @@ function AppendUrlId(url, data) {
     return url
 }
 
-function SyncMethod(url, method, data, callback) {
+function SyncMethod(url, method, data, pk, callback) {
 
     if (['delete', 'update'].indexOf(method) > -1) {
-        url = AppendUrlId(url, data)
+        url = AppendUrlId(url, data, pk)
     }
 
     if (method === 'read') {
-        url = AppendUrlAttr(url, data)
+        url = AppendUrlAttr(url, data, pk)
     }
 
     var fetch_method = {

@@ -135,10 +135,15 @@ describe('Test Restful Backend', () => {
   })
 
   it('should add models (with collection)', (done) => {
-    let users = new Users()
-    users.add({"email": "yaame.zhu@cyanide.io"})
-    users.length.should.equal(1)
-    done()
+    try {
+      let users = new Users()
+      users.add({"email": "yaame.zhu@cyanide.io"})
+      users.length.should.equal(1)
+      done()
+    } catch(e) {
+      console.log(e);
+    }
+
   })
 
   it('should create models (with collection)', (done) => {

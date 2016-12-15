@@ -24,6 +24,10 @@ class Model extends EventEmitter {
         return {}
     }
 
+    get pk() {
+       return 'id' 
+    }
+
     /**
      * Constructor
      * @param  Object data Input Model Data
@@ -69,7 +73,7 @@ class Model extends EventEmitter {
         // Backbone Model return a xhr here, are you sure it is ok?
         options = options ? options : {}
         return new Promise((resolve, reject) => {
-            this.SyncMethod(this.url, method, this.serialize(), (error, response) => {
+            this.SyncMethod(this.url, method, this.serialize(), this.pk, (error, response) => {
                 if (error) {
                     console.error("Error with AJAX Method: ", this.url, method)
                     reject(error, response)
