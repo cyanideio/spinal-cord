@@ -1,10 +1,10 @@
 ```
-               _             __                          __
-   _________  (_)___  ____ _/ /     _________  _________/ /
-  / ___/ __ \/ / __ \/ __ `/ /_____/ ___/ __ \/ ___/ __  / 
- (__  ) /_/ / / / / / /_/ / /_____/ /__/ /_/ / /  / /_/ /  
-/____/ .___/_/_/ /_/\__,_/_/      \___/\____/_/   \__,_/   
-    /_/                                                    
+               _             __                          __    _     
+   _________  (_)___  ____ _/ /     _________  _________/ /   (_)____
+  / ___/ __ \/ / __ \/ __ `/ /_____/ ___/ __ \/ ___/ __  /   / / ___/
+ (__  ) /_/ / / / / / /_/ / /_____/ /__/ /_/ / /  / /_/ /   / (__  ) 
+/____/ .___/_/_/ /_/\__,_/_/      \___/\____/_/   \__,_(_)_/ /____/  
+    /_/                                                 /___/                                                          
 ```
 [![Build Status](https://travis-ci.org/cyanideio/spinal-cord.svg?branch=master)](https://travis-ci.org/cyanideio/spinal-cord) [![Coverage Status](https://coveralls.io/repos/github/cyanideio/spinal-cord/badge.svg?branch=master)](https://coveralls.io/github/cyanideio/spinal-cord?branch=master)
 # Spinal-Cord
