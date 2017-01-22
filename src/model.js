@@ -1,7 +1,7 @@
 'use strict'
 
 const EventEmitter = require('events').EventEmitter
-const SyncMethod = require('./backends/restful-native')
+const SyncMethod = require('./frontends/restful-native')
 
 /**
  * Model to Replace Backbone.Model
@@ -35,8 +35,6 @@ class Model extends EventEmitter {
     constructor(data) {
         super()
 
-        // <<<<<<<<
-        // 不是可以constructor(data = {}) 这样定义初始值的么？而且这样起名options会不会好点- -
         if (data === undefined) {
             data = {}
         }
@@ -47,14 +45,6 @@ class Model extends EventEmitter {
         // TODO: Add some validation for a few non-class types, ints, floats, strings, arrays, objects, etc.
         //  Auto-cooerce when possible to these types?
         Object.keys(this.types).forEach((property_name) => {
-            // <<<<<<<<<<<<
-            // 'instanceof' not always work very well,notice that:
-            // let a = new A(); a instanceof A is True
-            // B = _.extend(A,{})
-            // let b = new B(); b instanceof A is False
-            // not like java
-            // What's more: they exists for what? for example?
-            // >>>>>>>>>>>>
             if (!(this[property_name] instanceof this.types[property_name])) {
                 this[property_name] = new this.types[property_name](this[property_name])
             }
@@ -69,8 +59,6 @@ class Model extends EventEmitter {
     }
 
     sync(method, options) {
-        // <<<<<<<<<<<<<<
-        // Backbone Model return a xhr here, are you sure it is ok?
         options = options ? options : {}
         return new Promise((resolve, reject) => {
             this.SyncMethod(this.url, method, this.serialize(), this.pk, (error, response) => {

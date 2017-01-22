@@ -2,7 +2,7 @@
 var uuid = require('uuid');
 var EventEmitter = require('events').EventEmitter;
 var Model = require('./model.js');
-var SyncMethod = require('./backends/restful-native');
+var SyncMethod = require('./frontends/restful-native');
 
 class Collection extends EventEmitter {
     get model() {
