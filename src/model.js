@@ -1,7 +1,7 @@
 'use strict'
 
 const EventEmitter = require('events').EventEmitter
-const SyncMethod = require('./frontends/restful-native')
+const SyncMethod = require('./backends/restful-native')
 
 /**
  * Model to Replace Backbone.Model
@@ -103,8 +103,6 @@ class Model extends EventEmitter {
     }
 
     serialize() {
-        // <<<<<<<<<<<<
-        // Sorry..but, what's that?
         let _reserved_kwd = ['domain', '_events', '_eventsCount', '_maxListeners', '__collection_id']
         var out = {}
         Object.keys(Object.assign(this, this.defaults)).forEach((key) => {

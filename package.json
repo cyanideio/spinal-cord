@@ -30,6 +30,7 @@
     "supertest": "*",
     "istanbul": "*",
     "coveralls": "*",
-    "mocha-lcov-reporter": "*"
+    "mocha-lcov-reporter": "*",
+    "sinon": "*"
   }
 }

@@ -2,7 +2,8 @@
 const request = function(options) {
     return new Promise(function(resolv, reject) {
         var xhr = new XMLHttpRequest();
-        xhr.open(options.fetch_method, options.url, options.async);
+        var headers = options.headers;
+        xhr.open(options.fetch_method, options.uri, options.async);
         for (var key in headers) {
             if (headers.hasOwnProperty(key)) xhr.setRequestHeader(key, headers[key]);
         }
@@ -15,11 +16,11 @@ const request = function(options) {
                 }
             }
         }
-        xhr.send()
+        xhr.send();
     })
 
 }
-const querystring = encodeURIComponent;
+// const querystring = encodeURIComponent;
 
 function fakeEncode(str) {
     return str
@@ -34,7 +35,7 @@ function AppendUrlAttr(url, data, pk) {
             url += '/'
         }
         if (data) {
-            url += `?${encodeURIComponent(fakeEncode(str))}`
+            url += `?${fakeEncode(data)}`
         }
     }
     return url
