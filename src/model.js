@@ -130,7 +130,7 @@ class Model extends EventEmitter {
             if (this[key] !== null && this[key] !== undefined && this[key].constructor.name) {
                 if (this[key].constructor.name !== 'String' && this[key].constructor.name !== 'Number' &&
                     this[key].constructor.name !== 'Boolean' && this[key].constructor.name !== 'Object' &&
-                    this[key].constructor.name !== 'Array') {
+                    this[key].constructor.name !== 'Array' && this[key].constructor.name !== 'Date') {
                     out[key] = this[key].serialize()
                 }
             }
