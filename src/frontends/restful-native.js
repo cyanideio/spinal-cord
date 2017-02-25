@@ -3,7 +3,7 @@ const request = function(options) {
     return new Promise(function(resolv, reject) {
         var xhr = new XMLHttpRequest();
         var headers = options.headers;
-        xhr.open(options.fetch_method, options.uri, options.async);
+        xhr.open(options.method, options.uri, options.async);
         for (var key in headers) {
             if (headers.hasOwnProperty(key)) xhr.setRequestHeader(key, headers[key]);
         }
@@ -79,7 +79,6 @@ function SyncMethod(url, method, data, pk, callback) {
         headers: headers,
         uri: url,
     }
-
     // if (data && (fetch_method === "PUT" || fetch_method === "POST")) {
     //     options.body = JSON.stringify(data)
     // }
