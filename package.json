@@ -2,6 +2,9 @@
   "name": "spinal-cord",
   "version": "0.0.1",
   "description": "Abstract Collection & Models inspired by Backbone.js",
+  "browser": {
+    "index.js": "./testIndex.js"
+  },
   "main": "index.js",
   "scripts": {
     "build_docs": "jsdoc -c jsdoc.conf",

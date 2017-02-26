@@ -11,7 +11,7 @@ const TastypieModel = require('./src/restful/tastypie_model')
 
 const ModelBuilder = require('./src/export/build_model')
 const ModelFactory = require('./src/export/model_factory')
-console.log('now load is index.js')
+console.log('now load is testIndex.js')
 module.exports = {
   //   Backends: {
 		// RestNative: RestNative,
