@@ -1,7 +1,7 @@
 'use strict'
 
 const EventEmitter = require('events').EventEmitter
-const SyncMethod = require('./backends/restful-native')
+const SyncMethod = require('./frontends/restful-native')
 
 /**
  * Model to Replace Backbone.Model
