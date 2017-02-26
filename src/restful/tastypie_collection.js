@@ -1,16 +1,19 @@
 'use strict'
-const RestfulCollection = require('./collection')
+module.exports = function(RestNative) {
 
-class TastypieCollection extends RestfulCollection {
+    const RestfulCollection = require('./collection')(RestNative)
 
-    parse(resp, options){
-        if (resp.hasOwnProperty('objects')){
-          return resp.length ? resp.objects[0] : null
-        } else {
-          return resp
+    class TastypieCollection extends RestfulCollection {
+
+        parse(resp, options) {
+            if (resp.hasOwnProperty('objects')) {
+                return resp.length ? resp.objects[0] : null
+            } else {
+                return resp
+            }
         }
-    }
-		
-}
 
-module.exports = TastypieCollection
+    }
+
+    return TastypieCollection
+}

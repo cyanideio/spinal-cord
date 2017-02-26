@@ -1,7 +1,8 @@
 'use strict'
 const should = require('should');
-const RestfulModel = require('../src/restful/model')
-const RestfulCollection = require('../src/restful/collection')
+const RestNative = require('../src/backends/restful-native')
+const RestfulModel = require('../src/restful/model')(RestNative)
+const RestfulCollection = require('../src/restful/collection')(RestNative)
 var sinon = require('sinon');
 
 let App = require('json-server')

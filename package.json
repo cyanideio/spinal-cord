@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Abstract Collection & Models inspired by Backbone.js",
   "browser": {
-    "index.js": "./testIndex.js"
+    "index.js": "./frontmodule.js"
   },
   "main": "index.js",
   "scripts": {

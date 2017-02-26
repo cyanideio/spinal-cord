@@ -1,7 +1,7 @@
 'use strict'
 
-const AjaxMethod = require('./src/backends/ajax')
-const RestNative = require('./src/backends/restful-native')
+const AjaxMethod = require('./src/frontends/ajax')
+const RestNative = require('./src/frontends/restful-native')
 const Collection = require('./src/collection')(RestNative)
 const Model = require('./src/model')(RestNative)
 const RestfulModel = require('./src/restful/model')(RestNative)
@@ -11,21 +11,21 @@ const TastypieModel = require('./src/restful/tastypie_model')(RestNative)
 
 const ModelBuilder = require('./src/export/build_model')
 const ModelFactory = require('./src/export/model_factory')
-
+console.log('now load is testIndex.js')
 module.exports = {
-    Backends: {
-        RestNative: RestNative,
-        AjaxMethod: AjaxMethod
+    Frontends: {
+		RestNative: RestNative,
+		AjaxMethod: AjaxMethod
     },
     Collection: Collection,
     Model: Model,
     Restful: {
-        Collection: RestfulCollection,
-        Model: RestfulModel,
-        Tastypie: {
-            Collection: TastypieCollection,
-            Model: TastypieModel
-        }
+    	Collection: RestfulCollection,
+    	Model: RestfulModel,
+    	Tastypie: {
+	    	Collection: TastypieCollection,
+    		Model: TastypieModel
+    	}
     },
     Builder: {
         Model: function(config) {

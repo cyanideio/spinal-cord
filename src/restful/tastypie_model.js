@@ -1,16 +1,18 @@
 'use strict'
-const RestfulModel = require('./model.js')
+module.exports = function(RestNative) {
 
-class TastypieModel extends RestfulModel {
+    const RestfulModel = require('./model.js')(RestNative)
 
-    parse(resp, options){
-        if (resp.hasOwnProperty('objects')){
-          return resp.length ? resp.objects[0] : null
-        } else {
-          return resp
+    class TastypieModel extends RestfulModel {
+
+        parse(resp, options) {
+            if (resp.hasOwnProperty('objects')) {
+                return resp.length ? resp.objects[0] : null
+            } else {
+                return resp
+            }
         }
-    }
-		
-}
 
-module.exports = TastypieModel
+    }
+	return TastypieModel
+}

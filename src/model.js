@@ -1,157 +1,158 @@
 'use strict'
 
 const EventEmitter = require('events').EventEmitter
-const SyncMethod = require('./frontends/restful-native')
+// const SyncMethod = require('./frontends/restful-native')
 
-/**
- * Model to Replace Backbone.Model
- */
-class Model extends EventEmitter {
-
+module.exports = function(SyncMethod) {
     /**
-     * Returns {} for data by default
-     * @return Object
+     * Model to Replace Backbone.Model
      */
-    get defaults() {
-        return {}
-    }
+    class Model extends EventEmitter {
 
-    /**
-     * Types for attributes
-     * @return Object
-     */
-    get types() {
-        return {}
-    }
-
-    get pk() {
-       return 'id' 
-    }
-
-    /**
-     * Constructor
-     * @param  Object data Input Model Data
-     */
-    constructor(data) {
-        super()
-
-        if (data === undefined) {
-            data = {}
+        /**
+         * Returns {} for data by default
+         * @return Object
+         */
+        get defaults() {
+            return {}
         }
 
-        this.id = null
-        Object.assign(this, this.defaults, data)
+        /**
+         * Types for attributes
+         * @return Object
+         */
+        get types() {
+            return {}
+        }
 
-        // TODO: Add some validation for a few non-class types, ints, floats, strings, arrays, objects, etc.
-        //  Auto-cooerce when possible to these types?
-        Object.keys(this.types).forEach((property_name) => {
-            if (!(this[property_name] instanceof this.types[property_name])) {
-                this[property_name] = new this.types[property_name](this[property_name])
+        get pk() {
+            return 'id'
+        }
+
+        /**
+         * Constructor
+         * @param  Object data Input Model Data
+         */
+        constructor(data) {
+            super()
+
+            if (data === undefined) {
+                data = {}
             }
-        })
-    }
-    get SyncMethod() {
-        return SyncMethod
-    }
 
-    parse(resp, options){
-        return resp
-    }
+            this.id = null
+            Object.assign(this, this.defaults, data)
 
-    sync(method, options) {
-        options = options ? options : {}
-        return new Promise((resolve, reject) => {
-            this.SyncMethod(this.url, method, this.serialize(), this.pk, (error, response) => {
-                if (error) {
-                    console.error("Error with AJAX Method: ", this.url, method)
-                    reject(error, response)
+            // TODO: Add some validation for a few non-class types, ints, floats, strings, arrays, objects, etc.
+            //  Auto-cooerce when possible to these types?
+            Object.keys(this.types).forEach((property_name) => {
+                if (!(this[property_name] instanceof this.types[property_name])) {
+                    this[property_name] = new this.types[property_name](this[property_name])
+                }
+            })
+        }
+        get SyncMethod() {
+            return SyncMethod
+        }
+
+        parse(resp, options) {
+            return resp
+        }
+
+        sync(method, options) {
+            options = options ? options : {}
+            return new Promise((resolve, reject) => {
+                this.SyncMethod(this.url, method, this.serialize(), this.pk, (error, response) => {
+                    if (error) {
+                        console.error("Error with AJAX Method: ", this.url, method)
+                        reject(error, response)
+                        return
+                    }
+                    let serverAttrs = options.parse ? options.parse(response, options) : this.parse(response, options)
+                    if (method === "create" || method === "update") {
+                        this.set(serverAttrs, false)
+                        this.emit("saved", this)
+                    } else if (method === "read") {
+                        this.set(serverAttrs, false)
+                        this.emit("fetched", this)
+                    } else if (method === "delete") {
+                        this.emit("deleted", this)
+                    }
+                    resolve(serverAttrs)
+                })
+            })
+        }
+
+        save(data) {
+            var args = arguments
+            var method = this.id === null ? "create" : "update"
+            if (data !== undefined) {
+                this.set(data, false)
+            }
+            return this.sync(method)
+        }
+
+        get() {
+            return this.sync("read")
+        }
+
+        delete() {
+            return this.sync("delete")
+        }
+        validate(data) {
+            //
+        }
+
+        serialize() {
+            let _reserved_kwd = ['domain', '_events', '_eventsCount', '_maxListeners', '__collection_id']
+            var out = {}
+            Object.keys(Object.assign(this, this.defaults)).forEach((key) => {
+                if (_reserved_kwd.indexOf(key) > -1) {
                     return
                 }
-                let serverAttrs = options.parse ? options.parse(response, options):this.parse(response, options)
-                if (method === "create" || method === "update") {
-                    this.set(serverAttrs, false)
-                    this.emit("saved", this)
-                } else if (method === "read") {
-                    this.set(serverAttrs, false)
-                    this.emit("fetched", this)
-                } else if (method === "delete") {
-                    this.emit("deleted", this)
+                if (key === "id" && this.id === null) {
+                    return
                 }
-                resolve(serverAttrs)
+                out[key] = this[key]
+                if (this[key] !== null && this[key] !== undefined && this[key].constructor.name) {
+                    if (this[key].constructor.name !== 'String' && this[key].constructor.name !== 'Number' &&
+                        this[key].constructor.name !== 'Boolean' && this[key].constructor.name !== 'Object' &&
+                        this[key].constructor.name !== 'Array') {
+                        out[key] = this[key].serialize()
+                    }
+                }
             })
-        })
-    }
-
-    save(data) {
-        var args = arguments
-        var method = this.id === null ? "create" : "update"
-        if (data !== undefined) {
-            this.set(data, false)
+            return out
         }
-        return this.sync(method)
-    } 
 
-    get() {
-        return this.sync("read")
-    }
+        toJSON() {
+            return this.serialize()
+        }
 
-    delete() {
-        return this.sync("delete")
-    }
-    validate(data) {
-        //
-    }
-
-    serialize() {
-        let _reserved_kwd = ['domain', '_events', '_eventsCount', '_maxListeners', '__collection_id']
-        var out = {}
-        Object.keys(Object.assign(this, this.defaults)).forEach((key) => {
-            if (_reserved_kwd.indexOf(key) > -1) {
-                return 
+        get url() {
+                return '/'
             }
-            if (key === "id" && this.id === null) {
-                return
+            // TODO: Uncomment this when function default args are supported.
+            //set(data, emit_change_event=true) {
+        set(data, emit_change_event) {
+            if (emit_change_event === undefined) {
+                emit_change_event = true
             }
-            out[key] = this[key]
-            if (this[key] !== null && this[key] !== undefined && this[key].constructor.name) {
-                if (this[key].constructor.name !== 'String' && this[key].constructor.name !== 'Number' &&
-                    this[key].constructor.name !== 'Boolean' && this[key].constructor.name !== 'Object' &&
-                    this[key].constructor.name !== 'Array') {
-                    out[key] = this[key].serialize()
+            var temp_data = Object.assign({}, this, data)
+            try {
+                this.validate(temp_data)
+                Object.assign(this, temp_data)
+                if (emit_change_event) {
+                    this.emit("change", this)
                 }
+                return true
+            } catch (exception) {
+                // Trigger event instead.
+                console.warn(exception)
+                this.emit("invalid", exception)
+                return false
             }
-        })
-        return out
-    }
-
-    toJSON(){
-       return this.serialize() 
-    }
-
-    get url() {
-        return '/'
-    }
-    // TODO: Uncomment this when function default args are supported.
-    //set(data, emit_change_event=true) {
-    set(data, emit_change_event) {
-        if (emit_change_event === undefined) {
-            emit_change_event = true
-        }
-        var temp_data = Object.assign({}, this, data)
-        try {
-            this.validate(temp_data)
-            Object.assign(this, temp_data)
-            if (emit_change_event) {
-                this.emit("change", this)
-            }
-            return true
-        } catch (exception) {
-            // Trigger event instead.
-            console.warn(exception)
-            this.emit("invalid", exception)
-            return false
         }
     }
+    return Model
 }
-
-module.exports = Model

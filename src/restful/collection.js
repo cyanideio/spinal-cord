@@ -1,28 +1,31 @@
 'use strict'
-const Collection = require('../collection.js')
+module.exports = function(RestNative) {
 
-class RestfulCollection extends Collection {
+    const Collection = require('../collection.js')(RestNative)
 
-	get resource_name(){
-		throw Error('unimplemented')
-	}
+    class RestfulCollection extends Collection {
 
-	get host(){
-		throw Error('unimplemented')
-	}
+        get resource_name() {
+            throw Error('unimplemented')
+        }
 
-	get url() {
-		return `${this.host}/${this.resource_name}/`
-	}
+        get host() {
+            throw Error('unimplemented')
+        }
 
-  parse(resp, options){
-    if (resp.constructor.name === 'Array'){
-      return resp.length ? resp[0] : null
-    } else {
-      return resp
+        get url() {
+            return `${this.host}/${this.resource_name}/`
+        }
+
+        parse(resp, options) {
+            if (resp.constructor.name === 'Array') {
+                return resp.length ? resp[0] : null
+            } else {
+                return resp
+            }
+        }
+
     }
-  }
-		
-}
 
-module.exports = RestfulCollection
+    return RestfulCollection
+}
