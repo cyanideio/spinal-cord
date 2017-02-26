@@ -10,10 +10,9 @@ const request = function(options) {
         xhr.onreadystatechange = function() {
             if(xhr.readyState == 4 ) {
                 if(xhr.status == 200) {
-                    console.log(xhr)
-                    resolv(xhr)
+                    resolv(JSON.parse(xhr.response))
                 } else {
-                    reject(xhr)
+                    reject(JSON.parse(xhr.response))
                 }
             }
         }
