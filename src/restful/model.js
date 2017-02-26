@@ -18,6 +18,7 @@ module.exports = function(RestNative) {
         }
 
         parse(resp, options) {
+            console.log('parse data', resp)
             if (resp.constructor.name === 'Array') {
                 return resp.length ? resp[0] : null
             } else {
