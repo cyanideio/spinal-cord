@@ -9,6 +9,9 @@ const RestfulCollection = require('./src/restful/collection')
 const TastypieCollection = require('./src/restful/tastypie_collection')
 const TastypieModel = require('./src/restful/tastypie_model')
 
+const ModelBuilder = require('./src/export/build_model')
+const ModelFactory = require('./src/export/model_factory')
+
 module.exports = {
     Backends: {
 		RestNative: RestNative,
@@ -23,5 +26,11 @@ module.exports = {
 	    	Collection: TastypieCollection,
     		Model: TastypieModel
     	}
+    },
+    Builder: {
+        Model: ModelBuilder
+    },
+    Factory: {
+        Model: ModelFactory
     }
 }
