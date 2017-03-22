@@ -16,7 +16,12 @@ const request = function(options) {
                 }
             }
         }
-        xhr.send();
+        if(options.method != 'POST') {
+            xhr.send();
+        } else {
+            if(options.body) xhr.send(JSON.stringify(options.body))
+            else xhr.send();
+        }
     })
 
 }
