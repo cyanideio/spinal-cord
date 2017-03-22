@@ -8,8 +8,8 @@ const request = function(options) {
             if (headers.hasOwnProperty(key)) xhr.setRequestHeader(key, headers[key]);
         }
         xhr.onreadystatechange = function() {
-            if(xhr.readyState == 4 ) {
-                if(xhr.status == 200) {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
                     resolv(JSON.parse(xhr.response))
                 } else {
                     reject(JSON.parse(xhr.response))
@@ -25,9 +25,17 @@ const request = function(options) {
     })
 
 }
+
 // const querystring = encodeURIComponent;
 
-function fakeEncode(str) {
+function fakeEncode(data) {
+    var str = "";
+    if (data) {
+        Object.keys(data).forEach(function(key) {
+            if (str) str += "&";
+            str += `${key}=${encodeURIComponent(data[key])}`
+        })
+    }
     return str
 }
 
@@ -39,7 +47,7 @@ function AppendUrlAttr(url, data, pk) {
         if (!url.endsWith('/')) {
             url += '/'
         }
-        if (data) {
+        if (data && data.length) {
             url += `?${fakeEncode(data)}`
         }
     }
@@ -62,7 +70,6 @@ function SyncMethod(url, method, data, pk, callback) {
     if (['delete', 'update'].indexOf(method) > -1) {
         url = AppendUrlId(url, data, pk)
     }
-
     if (method === 'read') {
         url = AppendUrlAttr(url, data, pk)
     }
@@ -77,22 +84,21 @@ function SyncMethod(url, method, data, pk, callback) {
     var headers = {
         'Content-Type': 'application/json'
     }
-
     var options = {
-        json: true,
-        method: fetch_method,
-        headers: headers,
-        uri: url,
-    }
-    // if (data && (fetch_method === "PUT" || fetch_method === "POST")) {
-    //     options.body = JSON.stringify(data)
-    // }
-    // options.body = JSON.stringify(data)
-    // console.log(data)
+            json: true,
+            method: fetch_method,
+            headers: headers,
+            uri: url,
+        }
+        // if (data && (fetch_method === "PUT" || fetch_method === "POST")) {
+        //     options.body = JSON.stringify(data)
+        // }
+        // options.body = JSON.stringify(data)
+        // console.log(data)
     options.body = data
     request(options)
-    .then(res  => callback(undefined, res))
-    .catch(err => callback(err))
+        .then(res => callback(undefined, res))
+        .catch(err => callback(err))
 }
 
 module.exports = SyncMethod
