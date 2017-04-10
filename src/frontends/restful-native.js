@@ -89,6 +89,7 @@ function SyncMethod(url, method, data, pk, callback) {
             method: fetch_method,
             headers: headers,
             uri: url,
+            async: true
         }
         // if (data && (fetch_method === "PUT" || fetch_method === "POST")) {
         //     options.body = JSON.stringify(data)
